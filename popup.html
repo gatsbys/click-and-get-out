@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Click and get out</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+  <header>
+    <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/><path d="m9 8 8 4-4 1-1 4-3-9Z"/></svg>
+    <span class="wordmark">Click and get out</span>
+  </header>
+  <main>
+    <div class="site-line"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a18 18 0 0 1 0 18 18 18 0 0 1 0-18Z"/></svg><h1 id="site">Abriendo página…</h1></div>
+    <button id="pick" class="primary" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 3 14 8-7 2-2 7-5-17Z"/></svg>Seleccionar elemento</button>
+    <label class="setting remember"><span>Recordar en esta web<small>Aplicar también en próximas visitas.</small></span><input id="remember" type="checkbox" role="switch" checked></label>
+    <p class="note grant"><span id="grant-text"></span> <button id="grant-toggle" class="link"></button></p>
+    <section class="saved" aria-labelledby="saved-heading">
+      <div class="section-heading"><h2 id="saved-heading">Elementos guardados</h2><span id="count">0</span></div>
+      <p id="empty" class="empty">No hay elementos guardados</p>
+      <ul id="rules" aria-label="Elementos guardados"></ul>
+      <p id="temporary" class="note" hidden></p>
+      <div class="tools"><button id="undo" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 4-5 5 5 5M3 9h11a7 7 0 0 1 0 14" transform="translate(0 -2)"/></svg>Deshacer</button><button id="reset" disabled>Restaurar web</button></div>
+    </section>
+    <label class="setting scroll"><span>Recuperar desplazamiento<small>Si un aviso bloquea el scroll.</small></span><input id="unlock" type="checkbox" role="switch" disabled></label>
+    <p id="status" role="status" aria-live="polite"></p>
+  </main>
+  <template id="rule-template">
+    <li>
+      <span class="label"></span>
+      <input class="toggle" type="checkbox" role="switch">
+      <button class="delete"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 7V5h4v2"/><path d="m6.5 7 .8 12.1a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9L17.5 7"/></svg></button>
+    </li>
+  </template>
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

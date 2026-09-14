@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>THE ZENITH · fictional newspaper for demos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Archivo+Narrow:wght@500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700;6..96,900&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="newspaper.css">
+</head>
+<body>
+
+<div id="promo-bar">
+  <div class="track">
+    <span><b>FLASH SALE</b> · THE ZENITH PREMIUM FOR £1 A MONTH · CANCEL ANY TIME · <b>TODAY ONLY</b> · NO CONTRACT ·</span>
+    <span><b>FLASH SALE</b> · THE ZENITH PREMIUM FOR £1 A MONTH · CANCEL ANY TIME · <b>TODAY ONLY</b> · NO CONTRACT ·</span>
+  </div>
+  <button class="shut" data-close="#promo-bar">Close ✕</button>
+</div>
+
+<header class="masthead">
+  <div class="wrap row">
+    <div class="date">Tuesday, 14 September<b>Evening edition</b></div>
+    <h1 class="nameplate">THE ZENITH<span class="dot">.</span></h1>
+    <div class="cta"><a class="btn-log" href="#">Sign in</a><a class="btn-sub" href="#">Subscribe</a></div>
+  </div>
+</header>
+
+<nav class="sections">
+  <div class="wrap">
+    <ul>
+      <li class="on"><a href="#">Cities</a></li>
+      <li><a href="#">Politics</a></li>
+      <li><a href="#">World</a></li>
+      <li><a href="#">Business</a></li>
+      <li><a href="#">Culture</a></li>
+      <li><a href="#">Science</a></li>
+      <li><a href="#">Opinion</a></li>
+      <li class="live"><i></i>Live</li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap ad-billboard">
+  <span class="ad-tag">Advertisement</span>
+  <div class="ad-slot">
+    <div class="brand">AEROBIT</div>
+    <div class="pitch"><b>Fly to 40 destinations from £9.99</b>Limited seats. Book before midnight and cabin baggage is on us.</div>
+    <div class="go">See deals</div>
+  </div>
+</div>
+
+<div class="wrap grid">
+
+  <div id="social-rail">
+    <a href="#" aria-label="Share"><svg viewBox="0 0 24 24"><path d="M18 16.1a3 3 0 0 0-2 .8l-7.1-4.1a3 3 0 0 0 0-1.6L16 7.1a3 3 0 1 0-1-2.1l-7.1 4.1a3 3 0 1 0 0 5.8L15 19a3 3 0 1 0 3-2.9Z"/></svg></a>
+    <a href="#" aria-label="Save"><svg viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg></a>
+    <a href="#" aria-label="Comment"><svg viewBox="0 0 24 24"><path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-5 4V5a1 1 0 0 1 1-1Z"/></svg></a>
+    <div class="n">142</div>
+  </div>
+
+  <article>
+    <div class="kicker">Urban dispatch</div>
+    <h1 class="head">The town that decided to turn the noise down</h1>
+    <p class="standfirst">Over fourteen months, a council of 80,000 people stripped eight hundred advertising structures from its streets. What was underneath surprised even the people who had voted for it.</p>
+    <div class="byline">
+      <span class="who">Nadia Faulkner</span><span class="sep">|</span>
+      <span>Chief reporter</span><span class="sep">|</span>
+      <span>14 Sept 2026 · 18:42</span><span class="sep">|</span>
+      <span>9 min read</span>
+    </div>
+
+    <figure class="hero">
+      <svg viewBox="0 0 1000 480" role="img" aria-label="Illustration of a cleared high street at dusk">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#e8ddc8"/><stop offset="1" stop-color="#f3ede0"/>
+          </linearGradient>
+          <pattern id="halftone" width="7" height="7" patternUnits="userSpaceOnUse">
+            <circle cx="3.5" cy="3.5" r="1.5" fill="#15120d" opacity=".2"/>
+          </pattern>
+          <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="1"/>
+          </linearGradient>
+          <mask id="m"><rect width="1000" height="480" fill="url(#fade)"/></mask>
+        </defs>
+        <rect width="1000" height="480" fill="url(#sky)"/>
+        <circle cx="712" cy="212" r="108" fill="#a8201a" opacity=".92"/>
+        <rect width="1000" height="480" fill="url(#halftone)" mask="url(#m)"/>
+        <g fill="#15120d">
+          <path d="M0 480V286h78v-44h62v44h54V214h96v266Z" opacity=".93"/>
+          <path d="M290 480V246h58v-38h74v38h40v-66h78v300Z" opacity=".86"/>
+          <path d="M540 480V300h104v-52h58v52h46v-38h64v218Z" opacity=".93"/>
+          <path d="M812 480V258h70v-46h56v46h62v222Z" opacity=".8"/>
+        </g>
+        <g fill="#f3ede0" opacity=".55">
+          <rect x="24" y="312" width="13" height="19"/><rect x="52" y="312" width="13" height="19"/><rect x="24" y="352" width="13" height="19"/><rect x="52" y="352" width="13" height="19"/>
+          <rect x="314" y="274" width="13" height="19"/><rect x="342" y="274" width="13" height="19"/><rect x="314" y="316" width="13" height="19"/>
+          <rect x="566" y="330" width="13" height="19"/><rect x="594" y="330" width="13" height="19"/><rect x="622" y="330" width="13" height="19"/><rect x="566" y="372" width="13" height="19"/>
+          <rect x="836" y="288" width="13" height="19"/><rect x="864" y="288" width="13" height="19"/><rect x="836" y="330" width="13" height="19"/>
+        </g>
+        <rect y="452" width="1000" height="28" fill="#15120d"/>
+        <g fill="#f3ede0" opacity=".3"><rect x="40" y="464" width="60" height="4"/><rect x="160" y="464" width="60" height="4"/><rect x="280" y="464" width="60" height="4"/><rect x="400" y="464" width="60" height="4"/><rect x="520" y="464" width="60" height="4"/><rect x="640" y="464" width="60" height="4"/><rect x="760" y="464" width="60" height="4"/><rect x="880" y="464" width="60" height="4"/></g>
+      </svg>
+      <figcaption>Station Road in October, after the last of the eight hundred structures came down. <b>Illustration:</b> Tom Ridley</figcaption>
+    </figure>
+
+    <div class="body">
+      <p>On the first day nobody noticed. The crews started at six in the morning at the south end, where the road narrows, and by the time the shops opened they had taken down forty-three structures. Mid-afternoon, a woman walked into the council offices to ask whether something had fallen over.</p>
+      <p>“It happened to all of us,” admits the councillor who pushed the by-law through. “We had spent so long looking past that stuff that we had stopped seeing it. And then suddenly there is the front of a 1904 building that had been there the whole time, behind a phone company hoarding.”</p>
+      <blockquote>
+        <p>We did not remove advertising. We removed a layer that had been up for thirty years and that nobody could remember approving.</p>
+        <cite>Council report, page 11</cite>
+      </blockquote>
+      <p>The report published in June counts eight hundred and twelve structures removed, two hundred and nine of which had no current licence. Another hundred and forty took up more pavement than the rules allowed. The rest were legal, quite simply, because they had been legalised by accumulation.</p>
+
+      <div id="app-banner">
+        <div class="ic">Z</div>
+        <div class="tx"><b>Take THE ZENITH with you</b><span>Instant alerts, offline reading and the print edition every morning.</span></div>
+        <div class="get">Get the app</div>
+      </div>
+
+      <div class="subhead">What was underneath</div>
+      <p>The most quoted part of the report is not the numbers but the photographs. A hundred and sixty pages of before and after in which the “after” rarely adds anything: there simply stops being something. A brick arch. A plaque from 1936. Three plane trees that had spent a decade competing with a nine-metre billboard.</p>
+      <p>Local traders, who had signed a petition against the plan, published their own figures in May. Footfall on the central stretch rose eleven per cent between February and April. The association notes that the figure coincides with two adjacent streets being partly pedestrianised, and asks for caution before crediting a single cause.</p>
+      <p>What nobody disputes is the noise. Not the audible kind: the other one. In perception surveys, the share of residents describing the centre as “overwhelming” fell from thirty-one to fourteen per cent in a year. No building work took place in that time. Not one new tree was planted.</p>
+
+      <div class="sponsored-grid">
+        <div class="hd"><h3>You may also like</h3><span>Sponsored content</span></div>
+        <ul>
+          <li><div class="thumb" style="background:linear-gradient(135deg,#ff7a18,#af002d)"></div><p>The electrician’s trick for cutting your bill that nobody tells you about</p><em>PENNYWISE</em></li>
+          <li><div class="thumb" style="background:linear-gradient(135deg,#0cebeb,#20e3b2)"></div><p>Dentists alarmed: here is what happens if you do this every night</p><em>VITALIQ</em></li>
+          <li><div class="thumb" style="background:linear-gradient(135deg,#654ea3,#eaafc8)"></div><p>He bought a house for £1 in this village — here is how it went</p><em>HOMESTEAD</em></li>
+          <li><div class="thumb" style="background:linear-gradient(135deg,#f7971e,#ffd200)"></div><p>If you are over 45, you may be entitled to this government payment</p><em>GRANTS&nbsp;TODAY</em></li>
+        </ul>
+      </div>
+
+      <div class="subhead">The cost</div>
+      <p>The operation cost £1.4 million, and the lost advertising revenue runs to about £380,000 a year. It is the argument repeated by the two groups who voted against, and the councillor does not deny it: “It is real money. What we are arguing about is what it buys.”</p>
+      <p>Five neighbouring councils have asked for a copy of the file. None has yet announced that it will do the same.</p>
+
+      <div class="related-spam">
+        <h3>Most read</h3>
+        <ul>
+          <li><span class="num">1</span><p>The map of villages that will pay you to move to them</p></li>
+          <li><span class="num">2</span><p>Three leftover recipes that will save tomorrow’s dinner</p></li>
+          <li><span class="num">3</span><p>The auction that has united an entire neighbourhood</p></li>
+          <li><span class="num">4</span><p>Why the trains are always late at exactly the same hour</p></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <aside>
+    <div class="box">
+      <h3>Front page</h3>
+      <ol>
+        <li><p>Housing plan pushed back to January as talks stall</p></li>
+        <li><p>Shortest harvest in twenty years puts olive oil to the test</p></li>
+        <li><p>A find beneath the cathedral forces the works to stop</p></li>
+        <li><p>Libraries open at night, and they fill up</p></li>
+      </ol>
+    </div>
+    <div id="sidebar-ad">
+      <span class="ad-tag">Advertisement</span>
+      <div class="ad-slot">
+        <div class="big">£9.99</div>
+        <div class="sm">Your October getaway, baggage included and no hidden fees.</div>
+        <div class="go">Book now</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer class="foot">
+  <div class="wrap">
+    <b>THE ZENITH</b> — A fictional publication built to demonstrate the Click and get out extension. The paper, the adverts and the people in it do not exist.
+  </div>
+</footer>
+
+<div id="video-float">
+  <button class="shut" data-close="#video-float" aria-label="Close video">✕</button>
+  <div class="screen"><span class="live">LIVE</span><span class="play"></span></div>
+  <div class="cap">The council meeting, minute by minute<span>Now playing · 1,204 watching</span></div>
+</div>
+
+<div id="cookie-wall">
+  <div class="wrap in">
+    <div>
+      <h4>We value your privacy</h4>
+      <p>We and our 847 partners store and access information on your device to deliver personalised advertising, measure content performance and develop products. You can change your preferences at any time in <a href="#">Settings</a>.</p>
+    </div>
+    <div class="acts">
+      <button class="ghost" data-close="#cookie-wall">Manage</button>
+      <button class="ghost" data-close="#cookie-wall">Reject</button>
+      <button class="solid" data-close="#cookie-wall">Accept all</button>
+    </div>
+  </div>
+</div>
+
+<div id="newsletter-modal" role="dialog" aria-modal="true" aria-label="Newsletter sign-up">
+  <div class="card">
+    <button class="shut" data-modal="off" aria-label="Close">✕</button>
+    <p class="em">Don’t miss a thing</p>
+    <p>Get our editors’ pick in your inbox every evening. Free, no strings attached.</p>
+    <div class="field"><input type="email" placeholder="you@email.com" aria-label="Email address"><button>Sign me up</button></div>
+    <small>By subscribing you accept our fictional privacy policy.</small>
+  </div>
+</div>
+
+<script src="demo.js"></script>
+</body>
+</html>

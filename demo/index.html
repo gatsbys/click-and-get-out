@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EL CENIT · diario ficticio de demostración</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Archivo+Narrow:wght@500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700;6..96,900&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="newspaper.css">
+</head>
+<body>
+
+<div id="promo-bar">
+  <div class="track">
+    <span><b>OFERTA FLASH</b> · EL CENIT PREMIUM POR 1&nbsp;€ AL MES · CANCELA CUANDO QUIERAS · <b>SOLO HOY</b> · SIN PERMANENCIA ·</span>
+    <span><b>OFERTA FLASH</b> · EL CENIT PREMIUM POR 1&nbsp;€ AL MES · CANCELA CUANDO QUIERAS · <b>SOLO HOY</b> · SIN PERMANENCIA ·</span>
+  </div>
+  <button class="shut" data-close="#promo-bar">Cerrar ✕</button>
+</div>
+
+<header class="masthead">
+  <div class="wrap row">
+    <div class="date">Martes, 14 de septiembre<b>Edición de tarde</b></div>
+    <h1 class="nameplate">EL CENIT<span class="dot">.</span></h1>
+    <div class="cta"><a class="btn-log" href="#">Entrar</a><a class="btn-sub" href="#">Suscríbete</a></div>
+  </div>
+</header>
+
+<nav class="sections">
+  <div class="wrap">
+    <ul>
+      <li class="on"><a href="#">Ciudades</a></li>
+      <li><a href="#">España</a></li>
+      <li><a href="#">Mundo</a></li>
+      <li><a href="#">Economía</a></li>
+      <li><a href="#">Cultura</a></li>
+      <li><a href="#">Ciencia</a></li>
+      <li><a href="#">Opinión</a></li>
+      <li class="live"><i></i>En directo</li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap ad-billboard">
+  <span class="ad-tag">Publicidad</span>
+  <div class="ad-slot">
+    <div class="brand">AEROBIT</div>
+    <div class="pitch"><b>Vuela a 40 destinos desde 9,99&nbsp;€</b>Plazas limitadas. Reserva antes de medianoche y llévate el equipaje de mano incluido.</div>
+    <div class="go">Ver ofertas</div>
+  </div>
+</div>
+
+<div class="wrap grid">
+
+  <div id="social-rail">
+    <a href="#" aria-label="Compartir"><svg viewBox="0 0 24 24"><path d="M18 16.1a3 3 0 0 0-2 .8l-7.1-4.1a3 3 0 0 0 0-1.6L16 7.1a3 3 0 1 0-1-2.1l-7.1 4.1a3 3 0 1 0 0 5.8L15 19a3 3 0 1 0 3-2.9Z"/></svg></a>
+    <a href="#" aria-label="Guardar"><svg viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg></a>
+    <a href="#" aria-label="Comentar"><svg viewBox="0 0 24 24"><path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-5 4V5a1 1 0 0 1 1-1Z"/></svg></a>
+    <div class="n">142</div>
+  </div>
+
+  <article>
+    <div class="kicker">Crónica urbana</div>
+    <h1 class="head">La ciudad que decidió quitarse el ruido de encima</h1>
+    <p class="standfirst">Durante catorce meses, un ayuntamiento de 80.000 habitantes retiró ochocientos soportes publicitarios de sus calles. Lo que quedó debajo sorprendió incluso a quienes habían votado a favor.</p>
+    <div class="byline">
+      <span class="who">Marta Elizalde</span><span class="sep">|</span>
+      <span>Enviada especial</span><span class="sep">|</span>
+      <span>14 sept 2026 · 18:42</span><span class="sep">|</span>
+      <span>9 min de lectura</span>
+    </div>
+
+    <figure class="hero">
+      <svg viewBox="0 0 1000 480" role="img" aria-label="Ilustración de una avenida despejada al atardecer">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#e8ddc8"/><stop offset="1" stop-color="#f3ede0"/>
+          </linearGradient>
+          <pattern id="halftone" width="7" height="7" patternUnits="userSpaceOnUse">
+            <circle cx="3.5" cy="3.5" r="1.5" fill="#15120d" opacity=".2"/>
+          </pattern>
+          <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="1"/>
+          </linearGradient>
+          <mask id="m"><rect width="1000" height="480" fill="url(#fade)"/></mask>
+        </defs>
+        <rect width="1000" height="480" fill="url(#sky)"/>
+        <circle cx="712" cy="212" r="108" fill="#a8201a" opacity=".92"/>
+        <rect width="1000" height="480" fill="url(#halftone)" mask="url(#m)"/>
+        <g fill="#15120d">
+          <path d="M0 480V286h78v-44h62v44h54V214h96v266Z" opacity=".93"/>
+          <path d="M290 480V246h58v-38h74v38h40v-66h78v300Z" opacity=".86"/>
+          <path d="M540 480V300h104v-52h58v52h46v-38h64v218Z" opacity=".93"/>
+          <path d="M812 480V258h70v-46h56v46h62v222Z" opacity=".8"/>
+        </g>
+        <g fill="#f3ede0" opacity=".55">
+          <rect x="24" y="312" width="13" height="19"/><rect x="52" y="312" width="13" height="19"/><rect x="24" y="352" width="13" height="19"/><rect x="52" y="352" width="13" height="19"/>
+          <rect x="314" y="274" width="13" height="19"/><rect x="342" y="274" width="13" height="19"/><rect x="314" y="316" width="13" height="19"/>
+          <rect x="566" y="330" width="13" height="19"/><rect x="594" y="330" width="13" height="19"/><rect x="622" y="330" width="13" height="19"/><rect x="566" y="372" width="13" height="19"/>
+          <rect x="836" y="288" width="13" height="19"/><rect x="864" y="288" width="13" height="19"/><rect x="836" y="330" width="13" height="19"/>
+        </g>
+        <rect y="452" width="1000" height="28" fill="#15120d"/>
+        <g fill="#f3ede0" opacity=".3"><rect x="40" y="464" width="60" height="4"/><rect x="160" y="464" width="60" height="4"/><rect x="280" y="464" width="60" height="4"/><rect x="400" y="464" width="60" height="4"/><rect x="520" y="464" width="60" height="4"/><rect x="640" y="464" width="60" height="4"/><rect x="760" y="464" width="60" height="4"/><rect x="880" y="464" width="60" height="4"/></g>
+      </svg>
+      <figcaption>La avenida de la Estación, en octubre, tras la retirada del último de los ochocientos soportes. <b>Ilustración:</b> Nuria Ontiveros</figcaption>
+    </figure>
+
+    <div class="body">
+      <p>El primer día nadie se dio cuenta. Los operarios empezaron a las seis de la mañana por el extremo sur, donde la avenida se estrecha, y para cuando abrieron las tiendas ya habían desmontado cuarenta y tres soportes. A media tarde, una mujer entró en el ayuntamiento a preguntar si se había caído algo.</p>
+      <p>«Nos pasó lo mismo a todos», admite la concejala que impulsó la ordenanza. «Llevábamos tanto tiempo mirando por encima de aquello que habíamos dejado de verlo. Y de repente ves la fachada de un edificio de 1904 que estaba ahí todo el rato, detrás de un cartel de telefonía.»</p>
+      <blockquote>
+        <p>No retiramos publicidad. Retiramos una capa que llevaba treinta años puesta y que ya nadie recordaba haber autorizado.</p>
+        <cite>Informe municipal, página 11</cite>
+      </blockquote>
+      <p>El informe que la corporación publicó en junio contabiliza ochocientos doce soportes retirados, de los cuales doscientos nueve carecían de licencia vigente. Otros ciento cuarenta ocupaban acera por encima del máximo permitido. El resto era legal, sencillamente, porque se había ido legalizando por acumulación.</p>
+
+      <div id="app-banner">
+        <div class="ic">C</div>
+        <div class="tx"><b>Llévate EL CENIT en el bolsillo</b><span>Alertas al instante, modo sin conexión y la edición impresa cada mañana.</span></div>
+        <div class="get">Descargar app</div>
+      </div>
+
+      <div class="subhead">Lo que había debajo</div>
+      <p>La parte más citada del informe no es la de los números, sino la de las fotografías. Ciento sesenta páginas de antes y después en las que el «después» rara vez añade nada: simplemente deja de haber algo. Un arco de ladrillo. Una placa de 1936. Tres plátanos de sombra que llevaban una década compitiendo con una valla de nueve metros.</p>
+      <p>El comercio local, que había firmado en contra, publicó en mayo sus propias cifras. La afluencia peatonal en el eje central subió un once por ciento entre febrero y abril. La asociación matiza que el dato coincide con la peatonalización parcial de dos calles adyacentes y pide prudencia antes de atribuir el efecto a una sola causa.</p>
+      <p>Lo que nadie discute es el ruido. No el sonoro: el otro. En las encuestas de percepción, el porcentaje de vecinos que describía el centro como «agobiante» pasó del treinta y uno al catorce por ciento en un año. Ninguna obra se hizo en ese tiempo. No se plantó un solo árbol nuevo.</p>
+
+      <div class="sponsored-grid">
+        <div class="hd"><h3>Te puede interesar</h3><span>Contenido patrocinado</span></div>
+        <ul>
+          <li><div class="thumb" style="background:linear-gradient(135deg,#ff7a18,#af002d)"></div><p>El truco de los electricistas para bajar la factura que nadie te cuenta</p><em>TARIFAZO</em></li>
+          <li><div class="thumb" style="background:linear-gradient(135deg,#0cebeb,#20e3b2)"></div><p>Dentistas alarmados: esto es lo que pasa si haces esto cada noche</p><em>NUTRIVIA</em></li>
+          <li><div class="thumb" style="background:linear-gradient(135deg,#654ea3,#eaafc8)"></div><p>Compró una casa por 1 € en este pueblo y así le fue tres años después</p><em>CASA&amp;CO</em></li>
+          <li><div class="thumb" style="background:linear-gradient(135deg,#f7971e,#ffd200)"></div><p>Si tienes más de 45 años, esta ayuda del Estado te puede corresponder</p><em>AYUDAS&nbsp;HOY</em></li>
+        </ul>
+      </div>
+
+      <div class="subhead">El coste</div>
+      <p>La operación costó 1,4 millones de euros y la pérdida de canon publicitario ronda los 380.000 al año. Es el argumento que repiten los dos grupos que votaron en contra y que la concejala no niega: «Es dinero real. Lo que discutimos es qué se compra con él.»</p>
+      <p>Cinco municipios de la comarca han pedido copia del expediente. Ninguno ha anunciado todavía que vaya a repetirlo.</p>
+
+      <div class="related-spam">
+        <h3>Lo más leído</h3>
+        <ul>
+          <li><span class="num">1</span><p>El mapa de los pueblos que pagan por que te mudes a ellos</p></li>
+          <li><span class="num">2</span><p>Tres recetas de aprovechamiento que salvan la cena de mañana</p></li>
+          <li><span class="num">3</span><p>La subasta que ha puesto de acuerdo a todo el barrio de Aravaca</p></li>
+          <li><span class="num">4</span><p>Por qué los trenes llegan tarde siempre a la misma hora</p></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <aside>
+    <div class="box">
+      <h3>En portada</h3>
+      <ol>
+        <li><p>El plan de vivienda se aplaza a enero por falta de acuerdo</p></li>
+        <li><p>La cosecha más corta en veinte años pone a prueba el aceite</p></li>
+        <li><p>Un hallazgo bajo la catedral obliga a parar las obras</p></li>
+        <li><p>Las bibliotecas abren de noche y se llenan</p></li>
+      </ol>
+    </div>
+    <div id="sidebar-ad">
+      <span class="ad-tag">Publicidad</span>
+      <div class="ad-slot">
+        <div class="big">9,99&nbsp;€</div>
+        <div class="sm">Tu escapada de octubre, con equipaje incluido y sin cargos ocultos.</div>
+        <div class="go">Reservar ya</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer class="foot">
+  <div class="wrap">
+    <b>EL CENIT</b> — Publicación ficticia creada para demostrar la extensión Click and get out. Ni el medio, ni los anuncios, ni las personas que aparecen existen.
+  </div>
+</footer>
+
+<div id="video-float">
+  <button class="shut" data-close="#video-float" aria-label="Cerrar vídeo">✕</button>
+  <div class="screen"><span class="live">EN DIRECTO</span><span class="play"></span></div>
+  <div class="cap">El pleno municipal, minuto a minuto<span>Reproduciéndose · 1.204 personas</span></div>
+</div>
+
+<div id="cookie-wall">
+  <div class="wrap in">
+    <div>
+      <h4>Valoramos tu privacidad</h4>
+      <p>Nosotros y nuestros 847 socios almacenamos y accedemos a información del dispositivo para ofrecer anuncios personalizados, medir el rendimiento del contenido y desarrollar productos. Puedes cambiar tus preferencias en cualquier momento en <a href="#">Configuración</a>.</p>
+    </div>
+    <div class="acts">
+      <button class="ghost" data-close="#cookie-wall">Configurar</button>
+      <button class="ghost" data-close="#cookie-wall">Rechazar</button>
+      <button class="solid" data-close="#cookie-wall">Aceptar todo</button>
+    </div>
+  </div>
+</div>
+
+<div id="newsletter-modal" role="dialog" aria-modal="true" aria-label="Suscripción al boletín">
+  <div class="card">
+    <button class="shut" data-modal="off" aria-label="Cerrar">✕</button>
+    <p class="em">No te pierdas nada</p>
+    <p>Recibe cada tarde la selección de nuestros redactores. Gratis, y sin compromiso.</p>
+    <div class="field"><input type="email" placeholder="tu@correo.com" aria-label="Correo electrónico"><button>Suscribirme</button></div>
+    <small>Al suscribirte aceptas nuestra política de privacidad ficticia.</small>
+  </div>
+</div>
+
+<script src="demo.js"></script>
+</body>
+</html>

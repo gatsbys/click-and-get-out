@@ -44,8 +44,10 @@ Only in the extension's local storage inside your Chrome profile
 - `storage`: to save your rules locally.
 - Optional site permissions (`http://*/*`, `https://*/*`): **not** requested at
   install time. They are requested for one site at a time when you tick
-  "Remember on this site", or once for all sites if you deliberately turn on
-  "Allow on all sites", which is off by default.
+  "Remember on this site", or once for all sites if you deliberately use the
+  "Allow on all sites" link, which the extension never triggers on its own. The
+  scope of the access does not change what the extension does: there are still
+  no network requests and no data leaves your browser.
 
 ## Your control over the data
 

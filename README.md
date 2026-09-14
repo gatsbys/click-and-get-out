@@ -1,109 +1,275 @@
+<div align="center">
+
+<img src="icons/128.png" width="88" alt="Click and get out">
+
 # Click and get out
 
-Extensión de Chrome en español para ocultar componentes de una web señalándolos con el ratón. Sin compilación, cuentas, servicios externos ni dependencias en producción.
+**Señala, haz clic y oculta lo que sobra.**
+Un selector visual para quitar de una web el banner, el aviso o la columna que te estorba — y que siga fuera la próxima vez que vuelvas.
 
-## Instalar
+<img src="https://img.shields.io/badge/Manifest-V3-1b4d8f?style=flat-square" alt="Manifest V3">
+<img src="https://img.shields.io/badge/Chrome-102+-0a58ff?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome 102+">
+<img src="https://img.shields.io/badge/dependencias_en_producción-0-171717?style=flat-square" alt="Cero dependencias">
+<img src="https://img.shields.io/badge/peticiones_de_red-0-a8201a?style=flat-square" alt="Cero peticiones de red">
+<img src="https://img.shields.io/badge/tests-18_passing-16a34a?style=flat-square" alt="18 tests">
 
-1. Abre `chrome://extensions` en Chrome.
-2. Activa **Modo de desarrollador** arriba a la derecha.
-3. Pulsa **Cargar descomprimida** y selecciona esta carpeta, `click-and-get-out`, que contiene `manifest.json`.
-4. Fija **Click and get out** desde el botón de extensiones (la pieza de puzle).
+</div>
 
-Si recibes `dist/click-and-get-out.zip`, descomprímelo primero y selecciona la carpeta `click-and-get-out` extraída. Conserva esa carpeta: Chrome carga los archivos desde ahí. No necesitas Node ni instalar paquetes para usar la extensión.
+---
 
-## Actualizar desde la versión anterior
+<table>
+<tr>
+<td width="50%" align="center"><strong>Antes</strong></td>
+<td width="50%" align="center"><strong>Después</strong></td>
+</tr>
+<tr>
+<td><img src="store/screenshots/es/01-before.png" alt="Un periódico con barra de suscripción, muro de cookies, vídeo flotante y anuncios"></td>
+<td><img src="store/screenshots/es/03-after.png" alt="El mismo periódico, con el artículo despejado"></td>
+</tr>
+</table>
 
-Sustituye los archivos en la misma carpeta que ya cargaste y pulsa **Recargar** en la tarjeta de Click and get out dentro de `chrome://extensions`. Después recarga las webs abiertas. Mantener la misma carpeta conserva el identificador de la extensión y sus reglas guardadas.
+<sup>Las dos capturas son de la web de demostración incluida en el repo, generadas con la extensión real. No hay retoque.</sup>
 
-La versión **1.2.0** añade un interruptor en cada elemento guardado para desactivar su regla sin borrarla, un botón de papelera para eliminarla y, en la barra flotante, la lista de lo que llevas ocultado en esa visita. Las reglas guardadas con versiones anteriores se conservan y siguen activas.
+---
 
-La versión **1.1.0** incorpora un menú compacto y una barra flotante con tema claro/oscuro automático según el sistema. Los permisos y las reglas siguen siendo los mismos. El selector CSS está disponible como información secundaria al pasar el cursor por la descripción del elemento.
+## 📖 Índice
 
-## Quitar un aviso como el de Sport
+- [Qué es](#-qué-es)
+- [Cómo se usa](#-cómo-se-usa)
+- [Los dos modos](#-los-dos-modos)
+- [Todo es reversible](#-todo-es-reversible)
+- [Cómo funciona por dentro](#-cómo-funciona-por-dentro)
+- [Privacidad y permisos](#-privacidad-y-permisos)
+- [Alcance y límites](#-alcance-y-límites)
+- [Instalar](#-instalar)
+- [Desarrollo](#-desarrollo)
+- [Web de demostración](#-web-de-demostración)
+- [Publicación en Chrome Web Store](#-publicación-en-chrome-web-store)
+- [Apoya el proyecto](#-apoya-el-proyecto)
 
-1. Abre la web, pulsa el icono de Click and get out y elige **Seleccionar elemento**.
-2. Señala el aviso. El marco azul muestra exactamente qué bloque vas a ocultar.
-3. Si solo se marca el texto, pulsa **↑** para ampliar la selección al contenedor. **↓** vuelve a la selección anterior. También hay botones en la barra.
-4. Haz clic o pulsa **Enter** para ocultar. Puedes seguir quitando bloques: la barra los va listando debajo, con la etiqueta **Guardado** o **Esta visita** según el modo, y **Deshacer** retira el último de esa lista.
-5. Pulsa **Esc** o **Terminar** para volver a navegar normalmente.
+## 🎯 Qué es
 
-**Recordar en esta web** guarda las reglas para futuras visitas y pide permiso únicamente para ese sitio. Sin marcarlo, el cambio dura hasta recargar esa pestaña. Las reglas se comparten entre páginas del mismo origen (protocolo, host y puerto); `sport.es` y `www.sport.es` son sitios distintos.
+Una extensión de Chrome que oculta elementos de una página web señalándolos con el ratón. Sin compilación, sin cuentas, sin servicios externos y sin una sola dependencia en producción.
 
-Como el permiso es por sitio, cada web nueva estrena su propio diálogo la primera vez que marcas «Recordar». Si prefieres no volver a verlo, el enlace **Permitir en todas** bajo esa opción concede el acceso una sola vez para cualquier web; el mismo enlace pasa a **Quitar** para retirarlo. Sigue siendo opcional: la extensión nunca lo pide por su cuenta.
+No es un bloqueador de anuncios. No intercepta descargas ni mantiene listas de filtros: actúa sobre lo que ya está en la página, cuando tú se lo pides y sobre el bloque exacto que tú eliges. Eso la hace útil justo donde los bloqueadores no llegan — el aviso de una web concreta, la columna de "te puede interesar", el vídeo que te persigue mientras lees.
 
-Cuando una web tiene cambios guardados, el icono de la extensión lleva una marca verde con el número de elementos ocultos en ella; el texto emergente da el detalle. Si no hay nada activo en esa web, el icono queda limpio.
+## 🖱️ Cómo se usa
 
-Si al quitar el aviso no puedes desplazarte, activa **Recuperar desplazamiento** en el menú. Es una opción independiente, reversible; también puede recordarse. Ajusta el overflow, la posición y la altura de los contenedores raíz de la página. Si altera su diseño, desactívala.
+<img src="store/screenshots/es/02-picking.png" alt="El selector activo, con el anuncio de cabecera encuadrado en azul y la barra flotante arriba">
 
-El menú lista los elementos guardados de la web que tengas abierta, cada uno con un interruptor y una papelera:
+1. Abre la web, pulsa el icono de la extensión y elige **Seleccionar elemento**.
+2. Señala el bloque. El marco azul muestra **exactamente** qué vas a ocultar antes de confirmar.
+3. Si solo se marca el texto, pulsa <kbd>↑</kbd> para ampliar la selección al contenedor. <kbd>↓</kbd> vuelve a la anterior. También hay botones en la barra.
+4. Haz clic o pulsa <kbd>Enter</kbd> para ocultar. Puedes seguir quitando bloques: la barra los va listando debajo y **Deshacer** retira el último.
+5. <kbd>Esc</kbd> o **Terminar** para volver a navegar normalmente.
 
-- **Interruptor:** desactiva la regla sin borrarla. El elemento vuelve a verse al momento en las pestañas abiertas de ese origen y también en las próximas visitas, hasta que lo actives de nuevo. Si vuelves a ocultar ese mismo elemento con el selector, la regla se reactiva.
-- **Papelera:** elimina la regla guardada y vuelve a mostrar sus coincidencias en las páginas abiertas de ese origen.
-- **Deshacer:** revierte la última ocultación hecha en esa visita; si esa ocultación reactivó una regla desactivada, la vuelve a desactivar.
-- **Restaurar web:** elimina todas las reglas, activas y desactivadas, y el desbloqueo guardados de ese origen; además limpia los cambios temporales de la pestaña actual. Las otras pestañas conservan sus cambios temporales hasta recargarlas.
+Mientras el selector está activo, los clics no navegan: puedes ocultar un enlace o un botón sin que la página se te vaya.
 
-## Alcance y límites
+## 🔀 Los dos modos
 
-Oculta elementos que ya están en la página. No detiene descargas de anuncios ni desactiva la detección de bloqueadores. Tampoco recupera contenido que la web no haya entregado.
+| | Solo esta visita | Recordar en esta web |
+|---|---|---|
+| **Cuánto dura** | Hasta que recargues la pestaña | Para siempre, hasta que lo deshagas |
+| **Permisos** | Ninguno extra | Pide acceso a ese sitio, en ese momento |
+| **Dónde se guarda** | En memoria | En tu perfil de Chrome |
 
-Intenta identificar bloques por ID, atributos o clases; cuando no hay una identificación única, usa una ruta estructural. La barra avisa si esa ruta depende de la estructura de la página. Si la web cambia su diseño, una regla puede dejar de servir o afectar a un bloque diferente: desactiva o elimina esa regla y vuelve a seleccionarlo. Las reglas se vuelven a aplicar si la web reinserta elementos o cambia su estilo.
+Las reglas se comparten entre páginas del mismo **origen** (protocolo, host y puerto). `ejemplo.com` y `www.ejemplo.com` son sitios distintos y no comparten reglas.
 
-El selector trabaja en el documento principal. No selecciona elementos internos de iframes ni de Shadow DOM; puedes seleccionar su contenedor externo cuando sea accesible. Los diálogos nativos en la capa superior, el visor PDF, Chrome Web Store y las páginas internas del navegador no están cubiertos. Algunas webs pueden interferir con el selector o volver a bloquear la navegación mediante JavaScript.
+Como el permiso es por sitio, cada web nueva estrena su propio diálogo la primera vez que marcas «Recordar». Si prefieres no volver a verlo, el enlace **Permitir en todas** concede el acceso una sola vez para cualquier web; el mismo enlace pasa a **Quitar** para retirarlo. Es opcional y la extensión nunca lo pide por su cuenta.
 
-En Sport se ha identificado un banner cuyas clases cambian de prefijo numérico entre cargas. La versión 1.1.2 usa su sufijo semántico estable en lugar de su posición dentro del documento. Las reglas antiguas guardadas por posición se deben volver a seleccionar para adoptar este criterio; no se sustituyen automáticamente por coincidencias de texto. La navegación inferior conserva su regla por ID.
+## ↩️ Todo es reversible
 
-## Privacidad y permisos
+<img src="store/screenshots/es/04-menu.png" alt="El menú de la extensión con ocho elementos guardados, cada uno con interruptor y papelera">
 
-- `activeTab`: acceso temporal a la pestaña cuando utilizas la extensión.
-- `scripting`: inserta el selector y aplica tus reglas.
-- `storage`: guarda las reglas localmente en el perfil de Chrome.
-- Permisos opcionales `http/https`: solo se solicitan para los sitios donde eliges recordar cambios, o para todas las webs a la vez si usas **Permitir en todas**.
+El menú lista lo que has ocultado en la web que tengas abierta, cada elemento con un interruptor y una papelera:
 
-La marca verde del icono no añade permisos: Chrome solo revela la dirección de una pestaña cuando ya has concedido acceso a ese sitio, que es justo donde puede haber reglas guardadas. En el resto de webs la extensión no ve la dirección y el icono queda sin marca.
+| Control | Qué hace |
+|---|---|
+| **Interruptor** | Desactiva la regla sin borrarla. El bloque vuelve a verse al momento y en próximas visitas, hasta que lo actives de nuevo |
+| **Papelera** | Elimina la regla y muestra sus coincidencias en las pestañas abiertas de ese origen |
+| **Deshacer** | Revierte la última ocultación de esa visita; si reactivó una regla desactivada, la vuelve a desactivar |
+| **Restaurar web** | Borra todas las reglas de ese origen, activas y desactivadas, y limpia los cambios temporales de la pestaña |
 
-No hay peticiones de red, analítica ni envío de datos desde la extensión. Las reglas contienen selectores y una etiqueta breve tomada del bloque seleccionado. No se sincronizan a una cuenta. Restaurar una web limpia sus reglas; el permiso concedido puede retirarse desde **Detalles → Acceso al sitio** en Chrome. Desinstalar elimina el almacenamiento local de la extensión.
+Cuando una web tiene cambios guardados, el icono lleva una marca verde con el número de elementos ocultos. Si no hay nada activo, el icono queda limpio.
+
+Y si al quitar un aviso la página se queda sin scroll, **Recuperar desplazamiento** ajusta el `overflow`, la posición y la altura de los contenedores raíz. Es una opción aparte, reversible, y también puede recordarse.
+
+## ⚙️ Cómo funciona por dentro
+
+```mermaid
+flowchart TB
+    subgraph EXT[" 🧩 La extensión "]
+        POPUP["<b>popup.js</b><br/>el menú"]
+        WORKER["<b>background.js</b><br/>service worker<br/><i>el único que escribe</i>"]
+        STORE[("chrome.storage.local<br/>una entrada por origen")]
+    end
+
+    subgraph TAB[" 🌐 Dentro de la pestaña "]
+        SELECT["<b>selectors.js</b><br/><i>¿cómo nombro este bloque?</i>"]
+        CONTENT["<b>content.js</b><br/>la barra y la reconciliación"]
+        DOM[("DOM de la página")]
+    end
+
+    POPUP -->|"conmutar · quitar · restaurar"| WORKER
+    POPUP -->|"iniciar el selector"| CONTENT
+    CONTENT -->|"guardar lo que ocultas"| WORKER
+    WORKER --> STORE
+    STORE -.->|"onChanged · reaplica en cada pestaña"| CONTENT
+    CONTENT --> SELECT
+    SELECT -.->|"selector CSS + ¿es frágil?"| CONTENT
+    CONTENT ==>|"display:none !important"| DOM
+    DOM -.->|"MutationObserver · 40 ms"| CONTENT
+```
+
+### 1. Identificar el bloque — `selectors.js`
+
+Cuando señalas un elemento, el motor busca la forma más corta y estable de nombrarlo, en este orden:
+
+1. Su `#id`, si es **estable** y único en la página.
+2. Un atributo semántico: `data-testid`, `data-test` o `aria-label`.
+3. Su etiqueta más una a cuatro clases, añadiéndolas hasta que la combinación sea única.
+4. Un caso especial: muchas webs generan clases con un prefijo numérico que **cambia en cada carga** (`_d123456789_pp__modal`). El motor detecta ese patrón y se agarra al sufijo semántico, que sí se mantiene.
+5. Si nada de lo anterior identifica el bloque, una ruta estructural con `:nth-of-type` anclada al ancestro identificable más cercano.
+
+«Estable» significa menos de 100 caracteres y sin rachas de cinco dígitos o doce hexadecimales seguidos — la firma de un identificador que la web regenera sola y que mañana ya no existirá.
+
+Solo el paso 5 devuelve `fragile: true`, y entonces la barra te avisa de que esa regla depende de la estructura de la página.
+
+### 2. Aplicar y mantener — `content.js`
+
+`reconcile()` calcula qué elementos deben estar ocultos y los pone en `display:none !important`. Antes de tocar nada **guarda el `display` en línea original**, valor y prioridad, en un `Map`. Cuando una regla deja de aplicarse, restaura exactamente ese valor: la extensión no deja residuo en la página.
+
+Un `MutationObserver` sobre todo el documento, con los atributos filtrados a `id`, `class`, `style`, `data-testid`, `data-test` y `aria-label`, reprograma esa reconciliación con 40 ms de margen. Eso es lo que hace que las reglas aguanten en webs que repintan solas, cargan contenido al hacer scroll o vuelven a insertar el bloque que acabas de quitar.
+
+La barra del selector vive en un `<div data-click-and-get-out-ui>` con `all:initial !important` y un **shadow root** propio, a `z-index` máximo. El CSS de la página no puede entrar y el de la extensión no puede salir. Los eventos de puntero y clic se capturan en fase de captura con `preventDefault` y `stopImmediatePropagation`, que es por lo que puedes ocultar un enlace sin navegar a él.
+
+### 3. Guardar — `background.js`
+
+El service worker es **el único que escribe**. Cada mensaje pasa por una promesa encadenada, así que dos pestañas escribiendo a la vez no pueden pisarse el ciclo leer-modificar-escribir.
+
+Registra el content script **por origen** con `persistAcrossSessions`, de modo que en la siguiente visita se ejecuta ya en `document_start`: el bloque no llega a verse antes de desaparecer. Si retiras el permiso de un sitio desde Chrome, `permissions.onRemoved` da de baja los scripts que ya no tienen acceso.
+
+También pinta la marca del icono. Solo lee `tab.url` en los sitios donde ya hay acceso concedido, que es justo donde puede haber reglas — por eso la marca no necesita el permiso `tabs`.
+
+### Modelo de datos
+
+Una entrada por origen, con un máximo de 200 reglas por web:
+
+```jsonc
+"site:https://ejemplo.com": {
+  "rules": [
+    {
+      "id": "8f3e...",              // crypto.randomUUID()
+      "selector": "#cookie-wall",   // lo que devolvió selectors.js
+      "label": "Valoramos tu privacidad…",
+      "fragile": false,             // true si es una ruta estructural
+      "enabled": true,              // el interruptor del menú
+      "createdAt": 1757808000000
+    }
+  ],
+  "unlockScroll": false
+}
+```
+
+## 🔒 Privacidad y permisos
+
+**No hay peticiones de red. Ninguna.** Ni analítica, ni cuentas, ni telemetría, ni código remoto. Lo que guardas no sale de tu perfil de Chrome y no se sincroniza con ninguna cuenta.
+
+| Permiso | Para qué |
+|---|---|
+| `activeTab` | Acceso temporal a la pestaña, solo al pulsar el icono |
+| `scripting` | Insertar el selector y aplicar tus reglas |
+| `storage` | Guardar las reglas localmente |
+| `http/https` *(opcional)* | Solo para los sitios donde eliges recordar cambios, o para todos a la vez si usas **Permitir en todas** |
+
+Las reglas contienen un selector CSS y una etiqueta breve tomada del bloque elegido. **Restaurar web** limpia las de ese origen; el permiso se retira desde **Detalles → Acceso al sitio**; desinstalar borra todo el almacenamiento local.
 
 Referencia: [permisos de Chrome](https://developer.chrome.com/docs/extensions/develop/concepts/declare-permissions) y [content scripts](https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts).
 
-## Desarrollo y comprobación
+## 🚧 Alcance y límites
 
-Requiere Node 22 o posterior para las herramientas de desarrollo.
+Conviene saber qué **no** hace:
+
+- **No es un bloqueador de anuncios.** Oculta lo que ya está en la página. No detiene descargas, no desactiva la detección de bloqueadores y no recupera contenido que la web no haya entregado.
+- **Las reglas pueden caducar.** Si la web rediseña, una regla puede dejar de servir o afectar a un bloque distinto. Desactívala o elimínala y vuelve a seleccionar.
+- **Solo el documento principal.** No entra dentro de iframes ni de Shadow DOM, aunque sí puedes seleccionar su contenedor externo.
+- **Zonas fuera de alcance:** diálogos nativos en la capa superior, el visor de PDF, la Chrome Web Store y las páginas internas del navegador.
+- Algunas webs pueden interferir con el selector o volver a bloquear la navegación por JavaScript.
+
+## 📦 Instalar
+
+1. Abre `chrome://extensions`.
+2. Activa **Modo de desarrollador**, arriba a la derecha.
+3. **Cargar descomprimida** → selecciona esta carpeta, la que contiene `manifest.json`.
+4. Fíjala desde el botón de extensiones (la pieza de puzle).
+
+Si recibes `dist/click-and-get-out.zip`, descomprímelo primero y carga la carpeta extraída. Consérvala: Chrome lee los archivos desde ahí. No hace falta Node ni instalar nada para *usar* la extensión.
+
+**Actualizar:** sustituye los archivos en la misma carpeta y pulsa **Recargar** en su tarjeta de `chrome://extensions`. Mantener la ruta conserva el identificador de la extensión y tus reglas guardadas.
+
+## 🛠️ Desarrollo
+
+Node 22 o posterior para las herramientas. Cero dependencias en producción; Playwright solo para las pruebas.
 
 ```sh
 npm ci
 npx playwright install chromium
-npm run check
-npm test
-npm run pack
+
+npm run check   # sintaxis de los cuatro scripts
+npm test        # 18 pruebas en Chromium real
+npm run pack    # los tres paquetes de dist/
+npm run demo    # la web de demostración
+npm run shots   # las capturas de la ficha
 ```
 
-`npm run pack` requiere la utilidad `zip` (incluida en macOS y habitualmente disponible en Linux). Genera tres salidas con los mismos archivos, solo los necesarios para instalar:
+`npm run pack` necesita la utilidad `zip` y genera tres salidas con los mismos archivos:
 
-- `dist/click-and-get-out/` es esa misma carpeta ya descomprimida, lista para **Cargar descomprimida**. Es la más cómoda para probar: cárgala una vez y después de cada `npm run pack` basta con pulsar **Recargar** en `chrome://extensions`. La ruta no cambia, así que la extensión conserva su identificador y sus reglas guardadas.
-- `dist/click-and-get-out.zip` contiene la carpeta `click-and-get-out`. Es el que se comparte para instalar a mano: se descomprime y se carga la carpeta extraída.
-- `dist/click-and-get-out-store.zip` tiene `manifest.json` en la raíz del archivo. Es el que acepta Chrome Web Store, que rechaza un ZIP con el manifest dentro de una carpeta.
+| Salida | Para qué |
+|---|---|
+| `dist/click-and-get-out/` | Carpeta lista para **Cargar descomprimida**. La más cómoda para iterar: cárgala una vez y luego basta **Recargar** |
+| `dist/click-and-get-out.zip` | Para compartir e instalar a mano |
+| `dist/click-and-get-out-store.zip` | **El de la tienda**, con `manifest.json` en la raíz del archivo |
 
-En Windows puedes comprimir esos archivos manualmente o cargar esta carpeta directamente.
+Las pruebas cargan la extensión en Chromium real con un perfil temporal y una página local. Cubren selección de contenedor, clic sin navegación, estilos `!important`, recarga, reinserción, escrituras simultáneas, aislamiento por origen, recuperación del scroll, controles del menú, desactivación y borrado de reglas, y la lista de la barra flotante. También ambos temas, teclado, tamaño del menú, listas largas, errores y ventanas estrechas, dejando capturas en `test-results/`.
 
-Las pruebas cargan la extensión en Chromium real con un perfil temporal y una página local. Cubren selección de contenedor, clic sin navegación, estilos `!important`, recarga, reinserción, escrituras simultáneas, aislamiento por origen, restauración del scroll, controles del popup, desactivación y borrado de reglas guardadas, lista de ocultados en la barra flotante, y recuperación de cambios. También verifican ambos temas, teclado, tamaño del menú, listas largas, errores, advertencias de selección estructural y ventanas estrechas; generan capturas en `test-results/`. El manifest de prueba concede acceso solamente a la página local; el diálogo nativo para conceder/denegar permisos opcionales y la activación real de `activeTab` desde la barra de Chrome requieren comprobación manual.
+Quedan dos cosas para comprobación manual, porque el diálogo nativo de permisos no se puede automatizar: conceder y denegar el permiso de un sitio, y la activación real de `activeTab` desde la barra de Chrome.
 
-Comprobación manual con la extensión instalada: en una web sin permiso previo, probar el modo temporal; después marcar «Recordar», aceptar el permiso de ese sitio y comprobar recarga; en otra web, denegar el permiso y comprobar que el modo temporal sigue disponible.
+## 📰 Web de demostración
 
-## Web de demostración
+```sh
+npm run demo   # http://localhost:4173
+```
 
-`npm run demo` sirve en `http://localhost:4173` un periódico ficticio, **EL CENIT**, saturado de barra de suscripción, muro de cookies, vídeo flotante, anuncios y contenido patrocinado: nueve bloques pensados para que el selector tenga algo que quitar. `demo/en.html` es la misma edición en inglés, **THE ZENITH**. Ambas comparten `demo/newspaper.css` y `demo/demo.js`; ni el medio, ni las marcas, ni las personas que aparecen existen.
+Sirve **EL CENIT**, un periódico ficticio saturado a propósito: barra de suscripción, muro de cookies, vídeo flotante, anuncio de cabecera, faldón lateral, banner de app, contenido patrocinado y "lo más leído". Nueve bloques para que el selector tenga algo que quitar. `/en.html` es la misma edición en inglés, **THE ZENITH**.
 
-Dos parámetros ayudan a probar casos concretos:
+Ni el medio, ni las marcas, ni las personas que aparecen existen.
 
-- `?modal=1` abre el aviso de boletín que bloquea el scroll, para comprobar **Recuperar desplazamiento**.
-- `?clean=1` esconde el ruido sin la extensión, para comparar de un vistazo.
+| Parámetro | Efecto |
+|---|---|
+| `?modal=1` | Abre el aviso que bloquea el scroll, para probar **Recuperar desplazamiento** |
+| `?clean=1` | Esconde el ruido sin la extensión, para comparar de un vistazo |
 
-## Capturas para la ficha
+`npm run shots` carga la extensión real sobre esa demo y genera en `store/screenshots/es/` y `store/screenshots/en/` las cuatro imágenes a 1280×800 que pide la tienda. De paso hace de prueba: si alguno de los nueve bloques pasa a necesitar una ruta estructural, el script falla en vez de sacar una captura mala.
 
-`npm run shots` carga la extensión real en Chromium sobre esa demo y genera en `store/screenshots/es/` y `store/screenshots/en/` las cuatro imágenes a 1280×800 que pide la tienda: la página con el ruido, el selector encuadrando un anuncio, la página ya limpia y el menú con los elementos guardados. De paso comprueba que los nueve bloques de la demo se resuelven con selectores estables; si alguno pasa a depender de la estructura de la página, el script falla.
+## 🚀 Publicación en Chrome Web Store
 
-## Publicación en Chrome Web Store
-
-`store/LISTING.md` reúne los textos de la ficha (título, descripciones, propósito único y justificación de cada permiso) listos para pegar en el Panel de desarrollador. `store/PRIVACY.md` es la política de privacidad, que hay que publicar en una URL pública para poder enlazarla desde la ficha. `store/LISTING.en.md` y `store/PRIVACY.en.md` son sus equivalentes en inglés.
+| Archivo | Contenido |
+|---|---|
+| `store/LISTING.md` | Textos de la ficha: título, descripciones, propósito único y justificación de cada permiso |
+| `store/PRIVACY.md` | Política de privacidad, para publicar en una URL pública y enlazarla desde la ficha |
+| `store/LISTING.en.md` · `store/PRIVACY.en.md` | Sus equivalentes en inglés |
+| `store/screenshots/` | Las capturas a 1280×800, por idioma |
 
 Sube `dist/click-and-get-out-store.zip`, no el otro: la tienda rechaza un ZIP cuyo `manifest.json` no esté en la raíz.
+
+## ☕ Apoya el proyecto
+
+Si te ha ahorrado algún disgusto, puedes invitarme a un café:
+
+<a href="https://www.buymeacoffee.com/the.gatsbys" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy me a coffee" height="48"></a>
+
+---
+
+<div align="center">
+<sub>Hecho con la idea de que una web debería enseñarte lo que fuiste a leer.</sub>
+</div>

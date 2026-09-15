@@ -12,6 +12,7 @@ A visual picker for taking the banner, the notice or the column you did not come
 <img src="https://img.shields.io/badge/production_dependencies-0-171717?style=flat-square" alt="Zero production dependencies">
 <img src="https://img.shields.io/badge/network_requests-0-a8201a?style=flat-square" alt="Zero network requests">
 <img src="https://img.shields.io/badge/tests-20_passing-16a34a?style=flat-square" alt="20 tests passing">
+<img src="https://img.shields.io/badge/license-PolyForm_Strict_1.0.0-57534e?style=flat-square" alt="License: PolyForm Strict 1.0.0">
 
 </div>
 
@@ -52,6 +53,7 @@ A visual picker for taking the banner, the notice or the column you did not come
 - [Demo site](#-demo-site)
 - [Publishing to the Chrome Web Store](#-publishing-to-the-chrome-web-store)
 - [Support the project](#-support-the-project)
+- [License](#-license)
 
 ## 🎯 What it is
 
@@ -228,7 +230,7 @@ Worth knowing what it does **not** do:
 3. **Load unpacked** → pick this folder, the one with `manifest.json` in it.
 4. Pin it from the extensions button (the puzzle piece).
 
-If you were handed `dist/click-and-get-out.zip`, unzip it first and load the extracted folder. Keep that folder: Chrome reads the files from there. Nothing needs Node, or any install at all, to *use* the extension.
+If what you have is a `click-and-get-out.zip` build, unzip it first and load the extracted folder. Keep that folder: Chrome reads the files from there. Nothing needs Node, or any install at all, to *use* the extension.
 
 **Updating:** replace the files in the same folder and hit **Reload** on its card in `chrome://extensions`. Keeping the path keeps the extension's id, and with it your saved rules.
 
@@ -252,7 +254,7 @@ npm run shots   # the store screenshots
 | Output | What for |
 |---|---|
 | `dist/click-and-get-out/` | Folder ready for **Load unpacked**. The handiest one to iterate on: load it once, then just **Reload** |
-| `dist/click-and-get-out.zip` | For sharing and installing by hand |
+| `dist/click-and-get-out.zip` | For installing by hand, without the repo |
 | `dist/click-and-get-out-store.zip` | **The store one**, with `manifest.json` at the archive root |
 
 `npm test` reports 20 passing: a static audit of `manifest.json` — Manifest V3, no mandatory host access, no declared content scripts — plus eighteen scenarios, under one parent test, that drive the real extension in Chromium with a throwaway profile and a local page. They cover container selection, marking with one click and confirming with the next, clicking without navigating, cards covered by a stretched link, `!important` styles, reload, reinsertion, concurrent writes, per-origin isolation, scroll recovery, the menu controls, disabling and deleting rules, and the toolbar's card and list. Also both themes, keyboard control, popup sizing, long lists, errors and narrow windows, leaving screenshots in `test-results/`.
@@ -278,6 +280,8 @@ Neither the paper, nor the brands, nor the people in it exist.
 
 ## 🚀 Publishing to the Chrome Web Store
 
+This is the maintainer's checklist. Under the [license](#-license), nobody else may publish the extension, on this store or any other.
+
 | File | Contents |
 |---|---|
 | `store/LISTING.en.md` | Listing copy: title, descriptions, single purpose and a justification for each permission |
@@ -292,6 +296,17 @@ Upload `dist/click-and-get-out-store.zip`, not the other one: the store rejects 
 If it has saved you some aggravation, you can buy me a coffee:
 
 <a href="https://www.buymeacoffee.com/the.gatsbys" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy me a coffee" height="48"></a>
+
+## 📄 License
+
+**Source-available, not open source.** The code is here to be read, audited and used, under the [PolyForm Strict License 1.0.0](LICENSE):
+
+- **You can** install it and use it, free of charge, for any personal or otherwise noncommercial purpose — and read every line to check that it does what it says.
+- **You cannot** distribute it, changed or unchanged — which includes uploading it to the Chrome Web Store or any other store, under this name or another — nor use it commercially, sell it, or make changes or new works based on it.
+
+That is a summary for convenience; the [license text](LICENSE) is what governs. For anything it does not cover, [open an issue](https://github.com/gatsbys/click-and-get-out/issues).
+
+Copyright © 2026 Cristian de Murcia.
 
 ---
 

@@ -1,6 +1,6 @@
 # Política de privacidad — Click and get out
 
-**Última actualización:** 14 de septiembre de 2026
+**Última actualización:** 15 de septiembre de 2026
 
 ## Resumen
 
@@ -70,5 +70,5 @@ fecha de la cabecera reflejará la revisión.
 
 ## Contacto
 
-<!-- Sustituye por la dirección de contacto que quieras publicar. -->
-Correo de contacto: PENDIENTE
+Para cualquier duda sobre esta política, abre un *issue* en el repositorio
+público del proyecto: https://github.com/gatsbys/click-and-get-out/issues

@@ -15,7 +15,7 @@ const extracted = resolve(root, 'dist/click-and-get-out');
 try {
   await mkdir(folder);
   await mkdir(resolve(root, 'dist'), { recursive: true });
-  for (const file of ['manifest.json', 'background.js', 'selectors.js', 'content.js', 'popup.html', 'popup.css', 'popup.js', 'icons', 'README.md']) {
+  for (const file of ['manifest.json', 'background.js', 'selectors.js', 'content.js', 'popup.html', 'popup.css', 'popup.js', 'icons', 'README.md', 'LICENSE']) {
     await cp(resolve(root, file), join(folder, file), { recursive: true });
   }
   await rm(unpacked, { force: true });

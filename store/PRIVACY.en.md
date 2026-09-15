@@ -1,6 +1,6 @@
 # Privacy policy — Click and get out
 
-**Last updated:** 14 September 2026
+**Last updated:** 15 September 2026
 
 Spanish version: [`PRIVACY.md`](PRIVACY.md).
 
@@ -71,5 +71,5 @@ header will reflect the revision.
 
 ## Contact
 
-<!-- Replace with the contact address you want to publish. -->
-Contact email: TO BE FILLED IN
+For any question about this policy, open an issue on the project's public
+repository: https://github.com/gatsbys/click-and-get-out/issues

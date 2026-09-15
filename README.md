@@ -72,7 +72,21 @@ It is not an ad blocker. It intercepts no downloads and keeps no filter lists: i
 4. Confirm with a second click on the marked block, with **Ocultar** (*Hide*) in the toolbar, or with <kbd>Enter</kbd>. Keep going if you like: the toolbar lists what you remove underneath, and **Deshacer** (*Undo*) takes back the last one.
 5. <kbd>Esc</kbd> or **Terminar** (*Done*) to go back to browsing.
 
-While the picker is running, clicks do not navigate: you can hide a link or a button without the page going anywhere.
+<img src="docs/images/toolbar.png" alt="The toolbar with the header ad marked: the card reads Elemento · ADVERTISEMENT AEROBIT Fly to 40 destinations…, then div.wrap.ad-billboard · 1180 × 146 px, and Ocultar is lit">
+
+<sup>The toolbar with a block marked. The first line of the card is the block's kind and text; the second, its tag, size and contents. The amber line, when it shows, means the rule will depend on the page's structure.</sup>
+
+| What you want | With the mouse | With the keyboard |
+|---|---|---|
+| Mark the block under the pointer | Click | <kbd>Enter</kbd> |
+| Grow the selection to its container | **Ampliar** | <kbd>↑</kbd> |
+| Shrink it back to the previous one | **Reducir** | <kbd>↓</kbd> |
+| Hide the marked block | A second click inside the frame, or **Ocultar** | <kbd>Enter</kbd> |
+| Drop the mark and keep pointing | Click another block | <kbd>Esc</kbd> |
+| Bring back the last block you hid | **Deshacer** | |
+| Leave the picker | **Terminar** | <kbd>Esc</kbd>, with nothing marked |
+
+While the picker is running, clicks do not navigate: you can hide a link or a button without the page going anywhere. And on cards that a single "stretched" link makes clickable end to end, pointing at the photo frames the photo, not the headline.
 
 ## 🔀 The two modes
 
@@ -260,7 +274,7 @@ Neither the paper, nor the brands, nor the people in it exist.
 | `?modal=1` | Opens the notice that blocks scrolling, to try **Recuperar desplazamiento** |
 | `?clean=1` | Hides the clutter without the extension, for a side-by-side comparison |
 
-`npm run shots` loads the real extension over that demo and writes the four 1280×800 images the store asks for into `store/screenshots/es/` and `store/screenshots/en/`. It doubles as a check: the header billboard has to reach a selection that does not depend on page structure, or the script fails rather than produce a bad screenshot. Each of the eight blocks it hides is reported too, with the selector it resolved to and whether that selector is structural.
+`npm run shots` loads the real extension over that demo and writes the four 1280×800 images the store asks for into `store/screenshots/es/` and `store/screenshots/en/`, plus the 2× close-up of the toolbar shown above, in `docs/images/`. It doubles as a check: the header billboard has to reach a selection that does not depend on page structure, or the script fails rather than produce a bad screenshot. Each of the eight blocks it hides is reported too, with the selector it resolved to and whether that selector is structural.
 
 ## 🚀 Publishing to the Chrome Web Store
 

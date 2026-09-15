@@ -101,24 +101,31 @@
         down: '<path d="m6 10 6 6 6-6"/>',
         undo: '<path d="m8 4-5 5 5 5M3 9h10a6 6 0 0 1 0 12"/>',
         close: '<path d="m6 6 12 12M6 18 18 6"/>',
-        cursor: '<path d="m5 3 14 8-7 2-2 7-5-17Z"/>'
+        cursor: '<path d="m5 3 14 8-7 2-2 7-5-17Z"/>',
+        hide: '<path d="m3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.2A10.4 10.4 0 0 1 12 5c4.5 0 8.3 2.9 10 7a11.5 11.5 0 0 1-2.3 3.5M6.6 6.6A11.6 11.6 0 0 0 2 12c1.7 4.1 5.5 7 10 7a9.9 9.9 0 0 0 3.4-.6"/>'
       };
       return `<svg viewBox="0 0 24 24" aria-hidden="true">${paths[name]}</svg>`;
     };
     root.innerHTML = `
       <style>
-        :host{color-scheme:light dark;--surface:#fff;--glass:rgba(255,255,255,.94);--subtle:#f5f5f5;--hover:#ededed;--text:#171717;--muted:#666;--border:#e5e5e5;--accent:#0068d9;--warning:#8a4b00;--error:#b42318}
-        @media(prefers-color-scheme:dark){:host{--surface:#171717;--glass:rgba(23,23,23,.94);--subtle:#202020;--hover:#2b2b2b;--text:#ededed;--muted:#a1a1a1;--border:#333;--accent:#52a8ff;--warning:#f3bc68;--error:#ffaaa3}}
+        :host{color-scheme:light dark;--surface:#fff;--glass:rgba(255,255,255,.94);--subtle:#f5f5f5;--hover:#ededed;--text:#171717;--muted:#666;--border:#e5e5e5;--accent:#0068d9;--primary:#171717;--on-primary:#fff;--warning:#8a4b00;--error:#b42318}
+        @media(prefers-color-scheme:dark){:host{--surface:#171717;--glass:rgba(23,23,23,.94);--subtle:#202020;--hover:#2b2b2b;--text:#ededed;--muted:#a1a1a1;--border:#333;--accent:#52a8ff;--primary:#ededed;--on-primary:#171717;--warning:#f3bc68;--error:#ffaaa3}}
         *{box-sizing:border-box}[hidden]{display:none!important}
         .outline{position:fixed;border:2px solid #0070f3;background:#0070f312;pointer-events:none;display:none;box-shadow:0 0 0 1px #fff,0 0 0 2px #0006}
+        .outline.pinned{border-width:3px;background:#0070f31f;box-shadow:0 0 0 1px #fff,0 0 0 2px #0006,0 0 0 7px #0070f333}
+        .tag{position:absolute;left:-3px;top:-27px;display:none;font:600 11px/1.2 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#fff;background:#0070f3;border-radius:6px 6px 6px 0;padding:4px 7px;white-space:nowrap;box-shadow:0 1px 3px #0003}
+        .outline.pinned .tag{display:block}.tag.inside{top:-3px;border-radius:0 0 6px 0}
         .bar{position:fixed;top:16px;left:50%;transform:translateX(-50%);width:560px;max-width:calc(100vw - 24px);max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:12px;padding:12px;pointer-events:auto;box-shadow:0 4px 20px #00000014,0 1px 3px #0000000a;font:13px/1.45 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;text-align:left;letter-spacing:normal}
         @supports(backdrop-filter:blur(12px)){.bar{background:var(--glass);backdrop-filter:blur(12px)}}
-        .top{display:flex;align-items:center;gap:8px}.title{font-weight:600;letter-spacing:-.15px;min-width:0}.mode{font-size:11px;color:var(--muted);margin-left:auto;white-space:nowrap}.row{display:flex;align-items:center;gap:12px;margin-top:10px}.actions{display:flex;gap:4px;flex-shrink:0}
+        .top{display:flex;align-items:center;gap:8px}.title{font-weight:600;letter-spacing:-.15px;min-width:0}.mode{font-size:11px;color:var(--muted);margin-left:auto;white-space:nowrap}.row{display:flex;align-items:center;gap:8px;margin-top:10px}.actions{display:flex;gap:4px;flex-shrink:0}
         svg{display:block;width:16px;height:16px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
         button{font:inherit;font-size:12px;display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:30px;cursor:pointer;border:1px solid transparent;border-radius:8px;padding:5px 7px;background:transparent;color:var(--text);transition:background .12s,border-color .12s}button:hover:not(:disabled){background:var(--subtle);border-color:var(--border)}button:active:not(:disabled){background:var(--hover)}button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}button:disabled{opacity:.4;cursor:default}
+        .confirm{border-color:var(--border);font-weight:600;flex-shrink:0;margin-left:auto}.confirm:not(:disabled){background:var(--primary);border-color:var(--primary);color:var(--on-primary)}.confirm:hover:not(:disabled){background:var(--primary);border-color:var(--primary);opacity:.88}.confirm:active:not(:disabled){background:var(--primary);opacity:.78}.confirm:not(:disabled) kbd{color:var(--on-primary);border-color:currentColor;opacity:.7}
         .close{border-color:var(--border);padding:4px 7px}.close svg{width:12px;height:12px}kbd{font:10px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--muted);border:1px solid var(--border);border-radius:4px;padding:1px 4px;white-space:nowrap}
-        .target{font-size:12px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-left:1px solid var(--border);padding-left:12px;flex:1}
-        .hint,.warning{font-size:12px;margin:9px 0 0;overflow-wrap:anywhere}.hint{color:var(--muted)}.hint.error{color:var(--error)}.warning{color:var(--warning)}
+        .target{margin-top:10px;padding:7px 10px;border-radius:8px;background:var(--subtle);min-width:0}.target:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+        .name{font-size:13px;line-height:1.35;font-weight:500;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.target.empty .name{color:var(--muted);font-weight:400}
+        .meta{font-size:11px;line-height:1.35;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+        .hint,.warning{font-size:12px;overflow-wrap:anywhere}.hint{margin:9px 0 0;color:var(--muted)}.hint.error{color:var(--error)}.warning{margin:5px 0 0;color:var(--warning)}
         .picks{margin-top:10px;border-top:1px solid var(--border);padding-top:9px}
         .picks-top{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
         .picks-count{border:1px solid var(--border);border-radius:4px;padding:0 4px;font-variant-numeric:tabular-nums}
@@ -126,19 +133,19 @@
         .picks-list li{display:flex;align-items:center;gap:8px;font-size:12px;padding:2px 0}
         .pick-label{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
         .pick-mode{font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0}
-        @media(max-width:520px){.row{flex-wrap:wrap;gap:8px}.target{flex-basis:100%;border-left:0;padding-left:0}.actions{flex:1}.actions button{flex:1}.mode{font-size:10px}.bar{top:8px;padding:10px}.close .close-label{display:none}}
-        @media(max-width:340px){.top{flex-wrap:wrap}.mode{order:3;flex-basis:100%;margin-left:24px}.close{margin-left:auto}.actions{gap:2px}.actions button{padding:5px}.actions kbd{display:none}}
+        @media(max-width:520px){.row{flex-wrap:wrap}.actions{flex-basis:100%}.actions button{flex:1}.mode{font-size:10px}.bar{top:8px;padding:10px}.close .close-label{display:none}}
+        @media(max-width:340px){.top{flex-wrap:wrap}.mode{order:3;flex-basis:100%;margin-left:24px}.close{margin-left:auto}.actions{gap:2px}.actions button{padding:5px}.actions kbd,.confirm kbd{display:none}}
         @media(prefers-reduced-motion:reduce){*{transition:none!important}}
         @media(prefers-reduced-transparency:reduce){.bar{background:var(--surface);backdrop-filter:none}}
       </style>
-      <div class="outline"></div>
+      <div class="outline"><span class="tag">Marcado · otro clic para ocultar</span></div>
       <section class="bar" role="dialog" aria-label="Selector de elementos">
         <div class="top">${icon('cursor')}<span class="title">Selecciona un elemento</span><span class="mode">${remember ? 'En esta web' : 'Solo esta visita'}</span><button data-action="close" class="close" aria-label="Terminar selección" aria-keyshortcuts="Escape" title="Terminar selección (Esc)">${icon('close')}<span class="close-label">Terminar</span><kbd aria-hidden="true">Esc</kbd></button></div>
+        <div class="target empty" tabindex="0" title="Haz clic en un elemento para marcarlo. Otro clic, Ocultar o Enter lo ocultan."><div class="name">Señala y haz clic para marcar</div><div class="meta">Mueve el ratón por la página para ver qué es cada bloque.</div><p class="warning" hidden>Esta selección depende de la estructura de la página.</p></div>
         <div class="row">
           <div class="actions"><button data-action="parent" aria-keyshortcuts="ArrowUp" title="Ampliar al contenedor (flecha arriba)">${icon('up')}Ampliar<kbd aria-hidden="true">↑</kbd></button><button data-action="child" aria-keyshortcuts="ArrowDown" title="Volver al elemento anterior (flecha abajo)">${icon('down')}Reducir<kbd aria-hidden="true">↓</kbd></button><button data-action="undo">${icon('undo')}Deshacer</button></div>
-          <div class="target" tabindex="0" title="Haz clic en un elemento o pulsa Enter para ocultarlo.">Señala y haz clic para ocultar</div>
+          <button data-action="hide" class="confirm" aria-keyshortcuts="Enter" title="Ocultar el elemento marcado (Enter)" disabled>${icon('hide')}Ocultar<kbd aria-hidden="true">⏎</kbd></button>
         </div>
-        <p class="warning" hidden>Esta selección depende de la estructura de la página.</p>
         <p class="hint" role="status" aria-live="polite" hidden></p>
         <div class="picks" role="group" aria-label="Elementos ocultos en esta visita" hidden>
           <div class="picks-top"><span>Ocultados en esta visita</span><span class="picks-count">0</span></div>
@@ -148,17 +155,42 @@
     (document.body || document.documentElement).append(host);
     const outline = root.querySelector('.outline');
     const hint = root.querySelector('.hint');
-    const targetLabel = root.querySelector('.target');
+    // La tarjeta (.target) describe el bloque señalado: tipo y texto, y debajo sus datos.
+    const card = root.querySelector('.target');
+    const cardName = root.querySelector('.name');
+    const cardMeta = root.querySelector('.meta');
     const warning = root.querySelector('.warning');
+    const tag = root.querySelector('.tag');
     const status = (text, error = false) => {
       hint.textContent = text;
       hint.hidden = !text;
       hint.classList.toggle('error', error);
     };
+    const kinds = { a: 'Enlace', img: 'Imagen', picture: 'Imagen', svg: 'Icono', video: 'Vídeo', audio: 'Audio', button: 'Botón', input: 'Campo', select: 'Campo', textarea: 'Campo', form: 'Formulario', aside: 'Aviso', dialog: 'Ventana emergente', nav: 'Navegación', header: 'Cabecera', footer: 'Pie de página', main: 'Contenido principal', article: 'Artículo', section: 'Sección', table: 'Tabla', ul: 'Lista', ol: 'Lista', li: 'Elemento de lista', p: 'Párrafo', h1: 'Título', h2: 'Título', h3: 'Título', h4: 'Título', h5: 'Título', h6: 'Título', iframe: 'Contenido incrustado' };
+    const roles = { dialog: 'Ventana emergente', alertdialog: 'Ventana emergente', button: 'Botón', link: 'Enlace', navigation: 'Navegación', banner: 'Cabecera', contentinfo: 'Pie de página', img: 'Imagen', list: 'Lista' };
+    const kindOf = el => roles[(el.getAttribute('role') || '').trim().split(/\s+/)[0]] || kinds[el.localName] || 'Elemento';
     const describe = el => {
-      const kinds = { A: 'Enlace', IMG: 'Imagen', BUTTON: 'Botón', ASIDE: 'Aviso', NAV: 'Navegación', ARTICLE: 'Artículo', SECTION: 'Sección', IFRAME: 'Contenido incrustado' };
-      const label = (el.getAttribute('aria-label') || el.getAttribute('alt') || el.innerText || el.localName).trim().replace(/\s+/g, ' ').slice(0, 80);
-      return `${kinds[el.tagName] || 'Elemento'} · ${label}`;
+      const text = (el.getAttribute('aria-label') || el.getAttribute('alt') || el.innerText || '').trim().replace(/\s+/g, ' ');
+      const label = text.length > 80 ? `${text.slice(0, 79).trimEnd()}…` : text;
+      return `${kindOf(el)} · ${label || el.localName}`;
+    };
+    const count = (n, one, many) => n ? [`${n} ${n === 1 ? one : many}`] : [];
+    // Datos para reconocer el bloque de un vistazo: etiqueta HTML, tamaño, si flota y qué contiene.
+    const details = (el, rect) => {
+      let signature = el.localName;
+      for (const token of [el.id && `#${el.id}`, ...[...el.classList].slice(0, 3).map(c => `.${c}`)].filter(Boolean)) {
+        if (signature.length + token.length > 40) break;
+        signature += token;
+      }
+      const floating = ['fixed', 'sticky'].includes(getComputedStyle(el).position);
+      return [
+        signature,
+        `${Math.round(rect.width)} × ${Math.round(rect.height)} px`,
+        ...(floating ? ['Flotante'] : []),
+        ...count(el.getElementsByTagName('img').length, 'imagen', 'imágenes'),
+        ...count(el.getElementsByTagName('video').length, 'vídeo', 'vídeos'),
+        ...count(el.querySelectorAll('a[href]').length, 'enlace', 'enlaces')
+      ].join(' · ');
     };
     const picks = root.querySelector('.picks');
     const picksList = root.querySelector('.picks-list');
@@ -184,43 +216,87 @@
     const parentButton = root.querySelector('[data-action=parent]');
     const childButton = root.querySelector('[data-action=child]');
     const undoButton = root.querySelector('[data-action=undo]');
+    const hideButton = root.querySelector('[data-action=hide]');
     let selected = null;
     let hovered = null;
     let children = [];
+    // Un clic marca y otro confirma: con marca, el marco deja de seguir al ratón
+    // para poder ir a la barra (Ampliar, Reducir, Ocultar) sin perder la selección.
+    let pinned = false;
     let busy = false;
+    const pendingHint = 'Marcado. Confírmalo con otro clic encima, con Ocultar o con Enter. Esc lo desmarca.';
     const focus = document.activeElement;
     function paint() {
-      if (!selected?.isConnected) selected = null;
+      if (!selected?.isConnected) { selected = null; pinned = false; children = []; }
       parentButton.disabled = !safe(selected?.parentElement);
       childButton.disabled = !children.length;
       undoButton.disabled = busy || !undoStack.length;
+      hideButton.disabled = busy || !pinned;
+      outline.classList.toggle('pinned', pinned);
       if (!selected) {
         outline.style.display = 'none';
         warning.hidden = true;
-        targetLabel.textContent = 'Señala y haz clic para ocultar';
-        targetLabel.title = 'Haz clic en un elemento o pulsa Enter para ocultarlo.';
-        targetLabel.removeAttribute('aria-description');
+        card.classList.add('empty');
+        cardName.textContent = 'Señala y haz clic para marcar';
+        cardMeta.textContent = 'Mueve el ratón por la página para ver qué es cada bloque.';
+        card.title = 'Haz clic en un elemento para marcarlo. Otro clic, Ocultar o Enter lo ocultan.';
+        card.removeAttribute('aria-description');
         return;
       }
       const rect = selected.getBoundingClientRect();
       Object.assign(outline.style, { display: 'block', left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px` });
+      // La etiqueta va encima del marco; si no cabe, dentro de su esquina.
+      tag.classList.toggle('inside', rect.top < 30);
       try {
         const result = selectorFor(selected);
-        targetLabel.textContent = describe(selected);
-        targetLabel.title = `${describe(selected)}\n${result.selector}`;
-        targetLabel.setAttribute('aria-description', `Selector CSS: ${result.selector}`);
+        const summary = describe(selected);
+        const facts = details(selected, rect);
+        card.classList.remove('empty');
+        cardName.textContent = summary;
+        cardMeta.textContent = facts;
+        card.title = `${summary}\n${facts}\n${result.selector}`;
+        card.setAttribute('aria-description', `Selector CSS: ${result.selector}`);
         warning.hidden = !result.fragile;
       } catch (error) { status(error.message, true); }
     }
+    function mark(el) {
+      if (!safe(el)) return;
+      if (el !== selected) { selected = el; children = []; }
+      pinned = true;
+      status(pendingHint);
+      paint();
+    }
+    function unmark() {
+      pinned = false;
+      children = [];
+      selected = safe(hovered) ? hovered : null;
+      status('');
+      paint();
+    }
     function parent() {
-      if (safe(selected?.parentElement)) { children.push(selected); selected = selected.parentElement; paint(); }
+      if (!safe(selected?.parentElement)) return;
+      children.push(selected);
+      selected = selected.parentElement;
+      // Ampliar ya es trabajar sobre el elemento: se marca para no perderlo al mover el ratón.
+      if (pinned) paint(); else mark(selected);
     }
     function child() { if (children.length) { selected = children.pop(); paint(); } }
+    // Muchas tarjetas (as.com, Bootstrap «stretched-link») cubren todo su bloque con un
+    // ::after del <a> del titular. Los pseudoelementos no pueden recibir eventos, así que
+    // sobre la foto Chrome señala el <a>, cuya caja ni siquiera contiene el puntero. En
+    // ese caso se toma el primer elemento real que ocupa ese punto: lo que se está viendo.
+    const covers = (el, x, y) => { const r = el.getBoundingClientRect(); return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom; };
+    function under(event) {
+      const { target, clientX: x, clientY: y } = event;
+      if (!(target instanceof Element) || covers(target, x, y)) return target;
+      return document.elementsFromPoint(x, y).find(el => el !== host && covers(el, x, y)) || target;
+    }
     function move(event) {
       if (busy || event.composedPath().includes(host)) return;
-      const next = event.target;
+      const next = under(event);
       if (next === hovered) return;
       hovered = next;
+      if (pinned) return;
       children = [];
       selected = safe(next) ? next : null;
       paint();
@@ -248,6 +324,7 @@
         selected = null;
         hovered = null;
         children = [];
+        pinned = false;
         status(remember ? 'Elemento oculto. Guardado para próximas visitas.' : 'Elemento oculto hasta que recargues la página.');
       } catch (error) { status(error.message, true); }
       finally { busy = false; paint(); }
@@ -256,19 +333,19 @@
       if (event.composedPath().includes(host)) return;
       event.preventDefault();
       event.stopImmediatePropagation();
-      if (event.type === 'click') {
-        if (!selected && safe(event.target)) selected = event.target;
-        void hideSelection();
-      }
+      if (event.type !== 'click' || busy) return;
+      const target = under(event);
+      if (pinned && selected?.contains(target)) void hideSelection();
+      else mark(target);
     }
     function key(event) {
-      if (event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); stop(); return; }
+      if (event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); if (pinned) unmark(); else stop(); return; }
       if (event.composedPath().includes(host)) return;
       if (['ArrowUp', 'ArrowDown', 'Enter'].includes(event.key)) {
         event.preventDefault(); event.stopImmediatePropagation();
         if (event.key === 'ArrowUp') parent();
         if (event.key === 'ArrowDown') child();
-        if (event.key === 'Enter') void hideSelection();
+        if (event.key === 'Enter') { if (pinned) void hideSelection(); else mark(selected); }
       }
     }
     root.addEventListener('click', async event => {
@@ -277,6 +354,7 @@
       if (busy) return;
       if (action === 'parent') parent();
       if (action === 'child') child();
+      if (action === 'hide' && pinned) void hideSelection();
       if (action === 'undo') {
         busy = true;
         try { await undo(); status('Último elemento restaurado.'); }

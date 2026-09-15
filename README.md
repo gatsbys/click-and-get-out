@@ -4,14 +4,14 @@
 
 # Click and get out
 
-**Señala, haz clic y oculta lo que sobra.**
-Un selector visual para quitar de una web el banner, el aviso o la columna que te estorba — y que siga fuera la próxima vez que vuelvas.
+**Point, click and hide whatever is in the way.**
+A visual picker for taking the banner, the notice or the column you did not come for off a page — and keeping it off the next time you visit.
 
 <img src="https://img.shields.io/badge/Manifest-V3-1b4d8f?style=flat-square" alt="Manifest V3">
 <img src="https://img.shields.io/badge/Chrome-102+-0a58ff?style=flat-square&logo=googlechrome&logoColor=white" alt="Chrome 102+">
-<img src="https://img.shields.io/badge/dependencias_en_producción-0-171717?style=flat-square" alt="Cero dependencias">
-<img src="https://img.shields.io/badge/peticiones_de_red-0-a8201a?style=flat-square" alt="Cero peticiones de red">
-<img src="https://img.shields.io/badge/tests-18_passing-16a34a?style=flat-square" alt="18 tests">
+<img src="https://img.shields.io/badge/production_dependencies-0-171717?style=flat-square" alt="Zero production dependencies">
+<img src="https://img.shields.io/badge/network_requests-0-a8201a?style=flat-square" alt="Zero network requests">
+<img src="https://img.shields.io/badge/tests-20_passing-16a34a?style=flat-square" alt="20 tests passing">
 
 </div>
 
@@ -19,151 +19,162 @@ Un selector visual para quitar de una web el banner, el aviso o la columna que t
 
 <table>
 <tr>
-<td width="50%" align="center"><strong>Antes</strong></td>
-<td width="50%" align="center"><strong>Después</strong></td>
+<td width="50%" align="center"><strong>Before</strong></td>
+<td width="50%" align="center"><strong>After</strong></td>
 </tr>
 <tr>
-<td><img src="store/screenshots/es/01-before.png" alt="Un periódico con barra de suscripción, muro de cookies, vídeo flotante y anuncios"></td>
-<td><img src="store/screenshots/es/03-after.png" alt="El mismo periódico, con el artículo despejado"></td>
+<td><img src="store/screenshots/en/01-before.png" alt="A newspaper buried under a subscription bar, a cookie wall, a floating video and ads"></td>
+<td><img src="store/screenshots/en/03-after.png" alt="The same newspaper, with the article in the clear"></td>
 </tr>
 </table>
 
-<sup>Las dos capturas son de la web de demostración incluida en el repo, generadas con la extensión real. No hay retoque.</sup>
+<sup>Both screenshots come from the demo site included in this repo, taken with the real extension. Nothing is retouched.</sup>
 
 ---
 
-## 📖 Índice
+<!-- The links below are GitHub's auto-generated heading slugs. Careful with heading
+     emoji: the ones that carry a variation selector (U+FE0F) — ⚙️ ↩️ 🛠️ 🖱️ and the
+     like — leave an invisible character at the front of the slug and silently break
+     every link that points at them. Only plain single-code-point emoji are used
+     here. If you swap one, click through this list before committing. -->
 
-- [Qué es](#-qué-es)
-- [Cómo se usa](#-cómo-se-usa)
-- [Los dos modos](#-los-dos-modos)
-- [Todo es reversible](#-todo-es-reversible)
-- [Cómo funciona por dentro](#-cómo-funciona-por-dentro)
-- [Privacidad y permisos](#-privacidad-y-permisos)
-- [Alcance y límites](#-alcance-y-límites)
-- [Instalar](#-instalar)
-- [Desarrollo](#-desarrollo)
-- [Web de demostración](#-web-de-demostración)
-- [Publicación en Chrome Web Store](#-publicación-en-chrome-web-store)
-- [Apoya el proyecto](#-apoya-el-proyecto)
+## 📖 Contents
 
-## 🎯 Qué es
+- [What it is](#-what-it-is)
+- [How to use it](#-how-to-use-it)
+- [The two modes](#-the-two-modes)
+- [Everything is reversible](#-everything-is-reversible)
+- [How it works inside](#-how-it-works-inside)
+- [Privacy and permissions](#-privacy-and-permissions)
+- [Scope and limits](#-scope-and-limits)
+- [Install](#-install)
+- [Development](#-development)
+- [Demo site](#-demo-site)
+- [Publishing to the Chrome Web Store](#-publishing-to-the-chrome-web-store)
+- [Support the project](#-support-the-project)
 
-Una extensión de Chrome que oculta elementos de una página web señalándolos con el ratón. Sin compilación, sin cuentas, sin servicios externos y sin una sola dependencia en producción.
+## 🎯 What it is
 
-No es un bloqueador de anuncios. No intercepta descargas ni mantiene listas de filtros: actúa sobre lo que ya está en la página, cuando tú se lo pides y sobre el bloque exacto que tú eliges. Eso la hace útil justo donde los bloqueadores no llegan — el aviso de una web concreta, la columna de "te puede interesar", el vídeo que te persigue mientras lees.
+A Chrome extension that hides elements of a web page by pointing at them with the mouse. No build step, no accounts, no external services, and not a single production dependency.
 
-## 🖱️ Cómo se usa
+It is not an ad blocker. It intercepts no downloads and keeps no filter lists: it acts on what is already on the page, when you ask it to, on the exact block you choose. That makes it useful precisely where blockers do not reach — one site's nagging notice, the "you might also like" column, the video that follows you down the article.
 
-<img src="store/screenshots/es/02-picking.png" alt="El selector activo, con el anuncio de cabecera encuadrado en azul y la barra flotante arriba">
+## 👆 How to use it
 
-1. Abre la web, pulsa el icono de la extensión y elige **Seleccionar elemento**.
-2. Señala el bloque. El marco azul muestra **exactamente** qué vas a ocultar antes de confirmar.
-3. Si solo se marca el texto, pulsa <kbd>↑</kbd> para ampliar la selección al contenedor. <kbd>↓</kbd> vuelve a la anterior. También hay botones en la barra.
-4. Haz clic o pulsa <kbd>Enter</kbd> para ocultar. Puedes seguir quitando bloques: la barra los va listando debajo y **Deshacer** retira el último.
-5. <kbd>Esc</kbd> o **Terminar** para volver a navegar normalmente.
+<img src="store/screenshots/en/02-picking.png" alt="The picker running, with the header ad framed in blue and the floating toolbar at the top">
 
-Mientras el selector está activo, los clics no navegan: puedes ocultar un enlace o un botón sin que la página se te vaya.
+> [!NOTE]
+> The extension's interface is Spanish only. Control names below are written as they appear on screen, with the English meaning in brackets.
 
-## 🔀 Los dos modos
+1. Open the page, click the extension icon and choose **Seleccionar elemento** (*Select element*).
+2. Point at the block. The blue frame follows the mouse and shows you **exactly** what you would hide, and the toolbar's card names it — *Enlace · Desactiva el bloqueo de anuncios* — with its HTML tag, its size in pixels, whether it floats over the page and how many images, videos and links it holds.
+3. Click to **mark** it. The frame locks onto the block, gets a "Marcado" tag and stops following the mouse, so you can adjust it from the toolbar: <kbd>↑</kbd> or **Ampliar** (*Grow*) widens the selection to its container, <kbd>↓</kbd> or **Reducir** (*Shrink*) goes back. Clicking a different block moves the mark; <kbd>Esc</kbd> drops it.
+4. Confirm with a second click on the marked block, with **Ocultar** (*Hide*) in the toolbar, or with <kbd>Enter</kbd>. Keep going if you like: the toolbar lists what you remove underneath, and **Deshacer** (*Undo*) takes back the last one.
+5. <kbd>Esc</kbd> or **Terminar** (*Done*) to go back to browsing.
 
-| | Solo esta visita | Recordar en esta web |
+While the picker is running, clicks do not navigate: you can hide a link or a button without the page going anywhere.
+
+## 🔀 The two modes
+
+| | **Solo esta visita** (*This visit only*) | **Recordar en esta web** (*Remember on this site*) |
 |---|---|---|
-| **Cuánto dura** | Hasta que recargues la pestaña | Para siempre, hasta que lo deshagas |
-| **Permisos** | Ninguno extra | Pide acceso a ese sitio, en ese momento |
-| **Dónde se guarda** | En memoria | En tu perfil de Chrome |
+| **How long it lasts** | Until you reload the tab | Until you undo it |
+| **Permissions** | Nothing beyond the click | Asks for access to that site, right then |
+| **Where it lives** | In memory | In your Chrome profile |
 
-Las reglas se comparten entre páginas del mismo **origen** (protocolo, host y puerto). `ejemplo.com` y `www.ejemplo.com` son sitios distintos y no comparten reglas.
+Rules are shared across pages of the same **origin** — scheme, host and port. `example.com` and `www.example.com` are different sites and do not share rules.
 
-Como el permiso es por sitio, cada web nueva estrena su propio diálogo la primera vez que marcas «Recordar». Si prefieres no volver a verlo, el enlace **Permitir en todas** concede el acceso una sola vez para cualquier web; el mismo enlace pasa a **Quitar** para retirarlo. Es opcional y la extensión nunca lo pide por su cuenta.
+Because the permission is per site, every new site brings up its own prompt the first time you tick "Recordar". If you would rather not see it again, the **Permitir en todas** (*Allow on all sites*) link grants access everywhere in one go, and the same link turns into **Quitar** (*Remove*) to take it back. It is entirely optional, and the extension never asks for it on its own.
 
-## ↩️ Todo es reversible
+## 🔄 Everything is reversible
 
-<img src="store/screenshots/es/04-menu.png" alt="El menú de la extensión con ocho elementos guardados, cada uno con interruptor y papelera">
+<img src="store/screenshots/en/04-menu.png" alt="The extension menu listing eight saved elements, each with a switch and a bin">
 
-El menú lista lo que has ocultado en la web que tengas abierta, cada elemento con un interruptor y una papelera:
+The menu lists what you have hidden on the site you have open, each entry with a switch and a bin:
 
-| Control | Qué hace |
+| Control | What it does |
 |---|---|
-| **Interruptor** | Desactiva la regla sin borrarla. El bloque vuelve a verse al momento y en próximas visitas, hasta que lo actives de nuevo |
-| **Papelera** | Elimina la regla y muestra sus coincidencias en las pestañas abiertas de ese origen |
-| **Deshacer** | Revierte la última ocultación de esa visita; si reactivó una regla desactivada, la vuelve a desactivar |
-| **Restaurar web** | Borra todas las reglas de ese origen, activas y desactivadas, y limpia los cambios temporales de la pestaña |
+| **Switch** | Turns a rule off without deleting it. The block comes back at once, and on future visits, until you turn it on again |
+| **Bin** | Deletes the rule and brings its matches back in every open tab on that origin |
+| **Deshacer** (*Undo*) | Reverts the last thing you hid this visit; if that had re-enabled a disabled rule, it disables it again |
+| **Restaurar web** (*Reset site*) | Clears every rule for that origin, enabled or not, and drops the tab's temporary changes |
 
-Cuando una web tiene cambios guardados, el icono lleva una marca verde con el número de elementos ocultos. Si no hay nada activo, el icono queda limpio.
+When a site has saved changes, the icon carries a green badge with the number of elements hidden there — or a dot, if the only thing saved is scroll recovery. With nothing active, the icon stays clean.
 
-Y si al quitar un aviso la página se queda sin scroll, **Recuperar desplazamiento** ajusta el `overflow`, la posición y la altura de los contenedores raíz. Es una opción aparte, reversible, y también puede recordarse.
+And if removing a notice leaves the page stuck with no scroll, **Recuperar desplazamiento** (*Restore scrolling*) resets `overflow`, position and height on the root containers. It is a separate option, reversible, and it can be remembered too.
 
-## ⚙️ Cómo funciona por dentro
+## 🔧 How it works inside
 
 ```mermaid
 flowchart TB
-    subgraph EXT[" 🧩 La extensión "]
-        POPUP["<b>popup.js</b><br/>el menú"]
-        WORKER["<b>background.js</b><br/>service worker<br/><i>el único que escribe</i>"]
-        STORE[("chrome.storage.local<br/>una entrada por origen")]
+    subgraph EXT[" 🧩 The extension "]
+        POPUP["<b>popup.js</b><br/>the menu"]
+        WORKER["<b>background.js</b><br/>service worker<br/><i>the only writer</i>"]
+        STORE[("chrome.storage.local<br/>one entry per origin")]
     end
 
-    subgraph TAB[" 🌐 Dentro de la pestaña "]
-        SELECT["<b>selectors.js</b><br/><i>¿cómo nombro este bloque?</i>"]
-        CONTENT["<b>content.js</b><br/>la barra y la reconciliación"]
-        DOM[("DOM de la página")]
+    subgraph TAB[" 🌐 Inside the tab "]
+        SELECT["<b>selectors.js</b><br/><i>what do I call this block?</i>"]
+        CONTENT["<b>content.js</b><br/>the toolbar and the reconciling"]
+        DOM[("the page's DOM")]
     end
 
-    POPUP -->|"conmutar · quitar · restaurar"| WORKER
-    POPUP -->|"iniciar el selector"| CONTENT
-    CONTENT -->|"guardar lo que ocultas"| WORKER
+    POPUP -->|"toggle · delete · reset"| WORKER
+    POPUP -->|"start the picker"| CONTENT
+    CONTENT -->|"save what you hide"| WORKER
     WORKER --> STORE
-    STORE -.->|"onChanged · reaplica en cada pestaña"| CONTENT
+    STORE -.->|"onChanged · re-apply in every tab"| CONTENT
     CONTENT --> SELECT
-    SELECT -.->|"selector CSS + ¿es frágil?"| CONTENT
+    SELECT -.->|"CSS selector + is it fragile?"| CONTENT
     CONTENT ==>|"display:none !important"| DOM
     DOM -.->|"MutationObserver · 40 ms"| CONTENT
 ```
 
-### 1. Identificar el bloque — `selectors.js`
+### 1. Naming the block — `selectors.js`
 
-Cuando señalas un elemento, el motor busca la forma más corta y estable de nombrarlo, en este orden:
+When you point at an element, the engine looks for the shortest stable way to name it, in this order:
 
-1. Su `#id`, si es **estable** y único en la página.
-2. Un atributo semántico: `data-testid`, `data-test` o `aria-label`.
-3. Su etiqueta más una a cuatro clases, añadiéndolas hasta que la combinación sea única.
-4. Un caso especial: muchas webs generan clases con un prefijo numérico que **cambia en cada carga** (`_d123456789_pp__modal`). El motor detecta ese patrón y se agarra al sufijo semántico, que sí se mantiene.
-5. Si nada de lo anterior identifica el bloque, una ruta estructural con `:nth-of-type` anclada al ancestro identificable más cercano.
+1. Its `#id`, if that id is **stable** and unique on the page.
+2. A semantic attribute: `data-testid`, `data-test` or `aria-label`.
+3. Its tag plus one to four classes, adding them until the combination is unique.
+4. A special case: many sites generate class names behind a numeric namespace that **changes on every load** (`_d123456789_pp__modal`). The engine spots that pattern and grabs the semantic suffix, which does survive.
+5. If none of the above pins the block down, a structural path of `:nth-of-type` steps anchored to the nearest identifiable ancestor.
 
-«Estable» significa menos de 100 caracteres y sin rachas de cinco dígitos o doce hexadecimales seguidos — la firma de un identificador que la web regenera sola y que mañana ya no existirá.
+"Stable" means under 100 characters and free of runs of five digits or twelve hex characters — the signature of an identifier the site regenerates on its own and that will not exist tomorrow.
 
-Solo el paso 5 devuelve `fragile: true`, y entonces la barra te avisa de que esa regla depende de la estructura de la página.
+Only step 5 returns `fragile: true`, and that is when the toolbar warns you that the rule depends on the page's structure.
 
-### 2. Aplicar y mantener — `content.js`
+### 2. Applying and holding — `content.js`
 
-`reconcile()` calcula qué elementos deben estar ocultos y los pone en `display:none !important`. Antes de tocar nada **guarda el `display` en línea original**, valor y prioridad, en un `Map`. Cuando una regla deja de aplicarse, restaura exactamente ese valor: la extensión no deja residuo en la página.
+`reconcile()` works out which elements should be hidden and sets them to `display:none !important`. Before touching anything it **stores the original inline `display`** — value and priority — in a `Map`. When a rule stops applying, it puts exactly that value back: the extension leaves no residue on the page.
 
-Un `MutationObserver` sobre todo el documento, con los atributos filtrados a `id`, `class`, `style`, `data-testid`, `data-test` y `aria-label`, reprograma esa reconciliación con 40 ms de margen. Eso es lo que hace que las reglas aguanten en webs que repintan solas, cargan contenido al hacer scroll o vuelven a insertar el bloque que acabas de quitar.
+A `MutationObserver` over the whole document, with attributes filtered down to `id`, `class`, `style`, `data-testid`, `data-test` and `aria-label`, reschedules that reconciliation with a 40 ms margin. That is what keeps rules alive on sites that repaint themselves, load content as you scroll, or put back the block you just removed.
 
-La barra del selector vive en un `<div data-click-and-get-out-ui>` con `all:initial !important` y un **shadow root** propio, a `z-index` máximo. El CSS de la página no puede entrar y el de la extensión no puede salir. Los eventos de puntero y clic se capturan en fase de captura con `preventDefault` y `stopImmediatePropagation`, que es por lo que puedes ocultar un enlace sin navegar a él.
+The picker's toolbar lives in a `<div data-click-and-get-out-ui>` with `all:initial !important` and a **shadow root** of its own, at maximum `z-index`. The page's CSS cannot get in and the extension's cannot get out. Pointer and click events are taken in the capture phase with `preventDefault` and `stopImmediatePropagation`, which is why you can hide a link without navigating to it. Picking is a two-step gesture: the first click only marks the block and freezes the frame, so the pointer can travel to the toolbar; a second click inside the frame, **Ocultar** or <kbd>Enter</kbd> is what actually hides it. The card under the title describes whatever is framed: its kind and text on the first line, and underneath its tag with id and classes, its size, *Flotante* when it is `fixed` or `sticky`, and a count of the images, videos and links inside; hovering the card shows the CSS selector the rule would use.
 
-### 3. Guardar — `background.js`
+One more thing the picker corrects: many sites make a whole card clickable with a "stretched link", an `::after` on the headline's `<a>` that covers the card. Pseudo-elements cannot receive events, so pointing at the photo makes the browser report the headline link — whose box does not even contain the pointer. When that happens the picker takes the first real element under the pointer instead, so the photo, the caption or the card itself get framed, not the headline.
 
-El service worker es **el único que escribe**. Cada mensaje pasa por una promesa encadenada, así que dos pestañas escribiendo a la vez no pueden pisarse el ciclo leer-modificar-escribir.
+### 3. Saving — `background.js`
 
-Registra el content script **por origen** con `persistAcrossSessions`, de modo que en la siguiente visita se ejecuta ya en `document_start`: el bloque no llega a verse antes de desaparecer. Si retiras el permiso de un sitio desde Chrome, `permissions.onRemoved` da de baja los scripts que ya no tienen acceso.
+The service worker is **the only writer**. Every message goes through one chained promise, so two tabs writing at once cannot trample each other's read-modify-write cycle.
 
-También pinta la marca del icono. Solo lee `tab.url` en los sitios donde ya hay acceso concedido, que es justo donde puede haber reglas — por eso la marca no necesita el permiso `tabs`.
+It registers the content script **per origin** with `persistAcrossSessions`, so on your next visit it already runs at `document_start`: the block never gets a chance to flash before it disappears. If you withdraw a site's permission from Chrome, `permissions.onRemoved` unregisters the scripts that no longer have access.
 
-### Modelo de datos
+It also paints the icon's badge. It only reads `tab.url` on sites that have already granted access, which is exactly where rules can exist — which is why the badge needs no `tabs` permission.
 
-Una entrada por origen, con un máximo de 200 reglas por web:
+### Data model
+
+One entry per origin, capped at 200 rules per site:
 
 ```jsonc
-"site:https://ejemplo.com": {
+"site:https://example.com": {
   "rules": [
     {
       "id": "8f3e...",              // crypto.randomUUID()
-      "selector": "#cookie-wall",   // lo que devolvió selectors.js
-      "label": "Valoramos tu privacidad…",
-      "fragile": false,             // true si es una ruta estructural
-      "enabled": true,              // el interruptor del menú
+      "selector": "#cookie-wall",   // whatever selectors.js returned
+      "label": "We value your privacy…",
+      "fragile": false,             // true for a structural path
+      "enabled": true,              // the switch in the menu
       "createdAt": 1757808000000
     }
   ],
@@ -171,105 +182,105 @@ Una entrada por origen, con un máximo de 200 reglas por web:
 }
 ```
 
-## 🔒 Privacidad y permisos
+## 🔒 Privacy and permissions
 
-**No hay peticiones de red. Ninguna.** Ni analítica, ni cuentas, ni telemetría, ni código remoto. Lo que guardas no sale de tu perfil de Chrome y no se sincroniza con ninguna cuenta.
+**There are no network requests. None.** No analytics, no accounts, no telemetry, no remote code. What you save never leaves your Chrome profile and is not synced to any account.
 
-| Permiso | Para qué |
+| Permission | What for |
 |---|---|
-| `activeTab` | Acceso temporal a la pestaña, solo al pulsar el icono |
-| `scripting` | Insertar el selector y aplicar tus reglas |
-| `storage` | Guardar las reglas localmente |
-| `http/https` *(opcional)* | Solo para los sitios donde eliges recordar cambios, o para todos a la vez si usas **Permitir en todas** |
+| `activeTab` | Temporary access to the tab, only when you click the icon |
+| `scripting` | Injecting the picker and applying your rules |
+| `storage` | Keeping the rules locally |
+| `http`/`https` *(optional)* | Only for the sites where you choose to remember changes — or for all of them at once via **Permitir en todas** |
 
-Las reglas contienen un selector CSS y una etiqueta breve tomada del bloque elegido. **Restaurar web** limpia las de ese origen; el permiso se retira desde **Detalles → Acceso al sitio**; desinstalar borra todo el almacenamiento local.
+A rule holds a CSS selector and a short label taken from the block you picked. **Restaurar web** clears the ones for that origin; the permission is withdrawn from **Details → Site access**; uninstalling wipes all local storage.
 
-Referencia: [permisos de Chrome](https://developer.chrome.com/docs/extensions/develop/concepts/declare-permissions) y [content scripts](https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts).
+Reference: [Chrome permissions](https://developer.chrome.com/docs/extensions/develop/concepts/declare-permissions) and [content scripts](https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts).
 
-## 🚧 Alcance y límites
+## 🚧 Scope and limits
 
-Conviene saber qué **no** hace:
+Worth knowing what it does **not** do:
 
-- **No es un bloqueador de anuncios.** Oculta lo que ya está en la página. No detiene descargas, no desactiva la detección de bloqueadores y no recupera contenido que la web no haya entregado.
-- **Las reglas pueden caducar.** Si la web rediseña, una regla puede dejar de servir o afectar a un bloque distinto. Desactívala o elimínala y vuelve a seleccionar.
-- **Solo el documento principal.** No entra dentro de iframes ni de Shadow DOM, aunque sí puedes seleccionar su contenedor externo.
-- **Zonas fuera de alcance:** diálogos nativos en la capa superior, el visor de PDF, la Chrome Web Store y las páginas internas del navegador.
-- Algunas webs pueden interferir con el selector o volver a bloquear la navegación por JavaScript.
+- **It is not an ad blocker.** It hides what is already on the page. It stops no downloads, defeats no ad-block detection, and cannot recover content the site never delivered.
+- **Rules can go stale.** If a site redesigns, a rule may stop working or start catching a different block. Switch it off or delete it and pick again.
+- **Main document only.** It does not reach inside iframes or Shadow DOM, though you can select their outer container.
+- **Out of reach:** native top-layer dialogs, the PDF viewer, the Chrome Web Store and the browser's internal pages.
+- Some sites may interfere with the picker or re-block navigation from JavaScript.
 
-## 📦 Instalar
+## 📦 Install
 
-1. Abre `chrome://extensions`.
-2. Activa **Modo de desarrollador**, arriba a la derecha.
-3. **Cargar descomprimida** → selecciona esta carpeta, la que contiene `manifest.json`.
-4. Fíjala desde el botón de extensiones (la pieza de puzle).
+1. Open `chrome://extensions`.
+2. Turn on **Developer mode**, top right.
+3. **Load unpacked** → pick this folder, the one with `manifest.json` in it.
+4. Pin it from the extensions button (the puzzle piece).
 
-Si recibes `dist/click-and-get-out.zip`, descomprímelo primero y carga la carpeta extraída. Consérvala: Chrome lee los archivos desde ahí. No hace falta Node ni instalar nada para *usar* la extensión.
+If you were handed `dist/click-and-get-out.zip`, unzip it first and load the extracted folder. Keep that folder: Chrome reads the files from there. Nothing needs Node, or any install at all, to *use* the extension.
 
-**Actualizar:** sustituye los archivos en la misma carpeta y pulsa **Recargar** en su tarjeta de `chrome://extensions`. Mantener la ruta conserva el identificador de la extensión y tus reglas guardadas.
+**Updating:** replace the files in the same folder and hit **Reload** on its card in `chrome://extensions`. Keeping the path keeps the extension's id, and with it your saved rules.
 
-## 🛠️ Desarrollo
+## 💻 Development
 
-Node 22 o posterior para las herramientas. Cero dependencias en producción; Playwright solo para las pruebas.
+Node 22 or newer for the tooling. Zero production dependencies; Playwright only for the tests.
 
 ```sh
 npm ci
 npx playwright install chromium
 
-npm run check   # sintaxis de los cuatro scripts
-npm test        # 18 pruebas en Chromium real
-npm run pack    # los tres paquetes de dist/
-npm run demo    # la web de demostración
-npm run shots   # las capturas de la ficha
+npm run check   # syntax of the four scripts
+npm test        # the full suite
+npm run pack    # the three builds in dist/
+npm run demo    # the demo site
+npm run shots   # the store screenshots
 ```
 
-`npm run pack` necesita la utilidad `zip` y genera tres salidas con los mismos archivos:
+`npm run pack` needs the `zip` utility and produces three outputs from the same files:
 
-| Salida | Para qué |
+| Output | What for |
 |---|---|
-| `dist/click-and-get-out/` | Carpeta lista para **Cargar descomprimida**. La más cómoda para iterar: cárgala una vez y luego basta **Recargar** |
-| `dist/click-and-get-out.zip` | Para compartir e instalar a mano |
-| `dist/click-and-get-out-store.zip` | **El de la tienda**, con `manifest.json` en la raíz del archivo |
+| `dist/click-and-get-out/` | Folder ready for **Load unpacked**. The handiest one to iterate on: load it once, then just **Reload** |
+| `dist/click-and-get-out.zip` | For sharing and installing by hand |
+| `dist/click-and-get-out-store.zip` | **The store one**, with `manifest.json` at the archive root |
 
-Las pruebas cargan la extensión en Chromium real con un perfil temporal y una página local. Cubren selección de contenedor, clic sin navegación, estilos `!important`, recarga, reinserción, escrituras simultáneas, aislamiento por origen, recuperación del scroll, controles del menú, desactivación y borrado de reglas, y la lista de la barra flotante. También ambos temas, teclado, tamaño del menú, listas largas, errores y ventanas estrechas, dejando capturas en `test-results/`.
+`npm test` reports 20 passing: a static audit of `manifest.json` — Manifest V3, no mandatory host access, no declared content scripts — plus eighteen scenarios, under one parent test, that drive the real extension in Chromium with a throwaway profile and a local page. They cover container selection, marking with one click and confirming with the next, clicking without navigating, cards covered by a stretched link, `!important` styles, reload, reinsertion, concurrent writes, per-origin isolation, scroll recovery, the menu controls, disabling and deleting rules, and the toolbar's card and list. Also both themes, keyboard control, popup sizing, long lists, errors and narrow windows, leaving screenshots in `test-results/`.
 
-Quedan dos cosas para comprobación manual, porque el diálogo nativo de permisos no se puede automatizar: conceder y denegar el permiso de un sitio, y la activación real de `activeTab` desde la barra de Chrome.
+Two things are left for a manual pass, because the native permission dialog cannot be automated: granting and denying a site's permission, and the real `activeTab` activation from Chrome's toolbar.
 
-## 📰 Web de demostración
+## 📰 Demo site
 
 ```sh
 npm run demo   # http://localhost:4173
 ```
 
-Sirve **EL CENIT**, un periódico ficticio saturado a propósito: barra de suscripción, muro de cookies, vídeo flotante, anuncio de cabecera, faldón lateral, banner de app, contenido patrocinado y "lo más leído". Nueve bloques para que el selector tenga algo que quitar. `/en.html` es la misma edición en inglés, **THE ZENITH**.
+It serves **EL CENIT**, a fictional newspaper deliberately buried in clutter: a subscription bar, a cookie wall, a floating video, a header billboard, a sidebar ad, an app banner, a sponsored grid, a "most read" list and a floating share rail. Nine blocks, so the picker has something to take away. `/en.html` is the same edition in English, **THE ZENITH**.
 
-Ni el medio, ni las marcas, ni las personas que aparecen existen.
+Neither the paper, nor the brands, nor the people in it exist.
 
-| Parámetro | Efecto |
+| Parameter | Effect |
 |---|---|
-| `?modal=1` | Abre el aviso que bloquea el scroll, para probar **Recuperar desplazamiento** |
-| `?clean=1` | Esconde el ruido sin la extensión, para comparar de un vistazo |
+| `?modal=1` | Opens the notice that blocks scrolling, to try **Recuperar desplazamiento** |
+| `?clean=1` | Hides the clutter without the extension, for a side-by-side comparison |
 
-`npm run shots` carga la extensión real sobre esa demo y genera en `store/screenshots/es/` y `store/screenshots/en/` las cuatro imágenes a 1280×800 que pide la tienda. De paso hace de prueba: si alguno de los nueve bloques pasa a necesitar una ruta estructural, el script falla en vez de sacar una captura mala.
+`npm run shots` loads the real extension over that demo and writes the four 1280×800 images the store asks for into `store/screenshots/es/` and `store/screenshots/en/`. It doubles as a check: the header billboard has to reach a selection that does not depend on page structure, or the script fails rather than produce a bad screenshot. Each of the eight blocks it hides is reported too, with the selector it resolved to and whether that selector is structural.
 
-## 🚀 Publicación en Chrome Web Store
+## 🚀 Publishing to the Chrome Web Store
 
-| Archivo | Contenido |
+| File | Contents |
 |---|---|
-| `store/LISTING.md` | Textos de la ficha: título, descripciones, propósito único y justificación de cada permiso |
-| `store/PRIVACY.md` | Política de privacidad, para publicar en una URL pública y enlazarla desde la ficha |
-| `store/LISTING.en.md` · `store/PRIVACY.en.md` | Sus equivalentes en inglés |
-| `store/screenshots/` | Las capturas a 1280×800, por idioma |
+| `store/LISTING.en.md` | Listing copy: title, descriptions, single purpose and a justification for each permission |
+| `store/PRIVACY.en.md` | Privacy policy, to publish at a public URL and link from the listing |
+| `store/LISTING.md` · `store/PRIVACY.md` | Their Spanish counterparts |
+| `store/screenshots/` | The 1280×800 images, per language |
 
-Sube `dist/click-and-get-out-store.zip`, no el otro: la tienda rechaza un ZIP cuyo `manifest.json` no esté en la raíz.
+Upload `dist/click-and-get-out-store.zip`, not the other one: the store rejects a ZIP whose `manifest.json` is not at the root.
 
-## ☕ Apoya el proyecto
+## ☕ Support the project
 
-Si te ha ahorrado algún disgusto, puedes invitarme a un café:
+If it has saved you some aggravation, you can buy me a coffee:
 
 <a href="https://www.buymeacoffee.com/the.gatsbys" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy me a coffee" height="48"></a>
 
 ---
 
 <div align="center">
-<sub>Hecho con la idea de que una web debería enseñarte lo que fuiste a leer.</sub>
+<sub>Built on the idea that a web page should show you what you came to read.</sub>
 </div>

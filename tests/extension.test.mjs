@@ -78,14 +78,76 @@ test('Real extension: selection, persistence, dynamic content, undo and isolatio
       assert.equal(await page.locator('#notice').evaluate(el => el.style.getPropertyValue('display')), 'block');
       assert.equal(await page.locator('#notice').evaluate(el => el.style.getPropertyPriority('display')), 'important');
     });
-    await t.test('click hides the pointed element without navigating', async () => {
+    await t.test('first click marks the element and a second click hides it without navigating', async () => {
       await start(false);
+      const bar = page.locator('[data-click-and-get-out-ui]').locator('.bar');
+      const target = bar.locator('.target .name');
+      const hide = bar.getByRole('button', { name: 'Ocultar', exact: true });
+      assert.equal(await hide.isDisabled(), true);
+      await page.locator('#notice-link').click();
+      assert.equal(await visible('#notice-link'), true);
+      assert.equal(await page.evaluate(() => window.pageClicks), 0);
+      assert.match(await target.textContent(), /^Enlace ·/);
+      assert.equal(await hide.isEnabled(), true);
+      assert.equal(await bar.locator('.hint').textContent(), 'Marcado. Confírmalo con otro clic encima, con Ocultar o con Enter. Esc lo desmarca.');
+      // The mark no longer follows the pointer, so the toolbar can be reached without losing it.
+      await page.locator('#article-one h2').hover();
+      assert.match(await target.textContent(), /^Enlace ·/);
       await page.locator('#notice-link').click();
       await waitHidden('#notice-link');
       assert.equal(await page.evaluate(() => window.pageClicks), 0);
       assert.equal(page.url(), origin + '/');
+      assert.equal(await hide.isDisabled(), true);
       await send({ type: 'undo' });
       await waitVisible('#notice-link');
+      await page.keyboard.press('Escape');
+    });
+    await t.test('a click elsewhere moves the mark, Esc drops it and the toolbar button confirms', async () => {
+      await start(false);
+      const bar = page.locator('[data-click-and-get-out-ui]').locator('.bar');
+      const target = bar.locator('.target .name');
+      const hide = bar.getByRole('button', { name: 'Ocultar', exact: true });
+      await page.locator('#notice-link').click();
+      await page.locator('#article-two').click({ position: { x: 10, y: 10 } });
+      assert.match(await target.textContent(), /^Artículo · Más noticias/);
+      assert.equal(await visible('#article-two'), true);
+      await page.keyboard.press('Escape');
+      assert.equal(await page.locator('[data-click-and-get-out-ui]').count(), 1);
+      assert.equal(await hide.isDisabled(), true);
+      assert.equal(await bar.locator('.hint').isVisible(), false);
+      await page.locator('#article-one .picture').hover();
+      await page.keyboard.press('Enter');
+      assert.equal(await visible('#article-one .picture'), true);
+      assert.equal(await hide.isEnabled(), true);
+      await hide.click();
+      await waitHidden('#article-one .picture');
+      assert.equal(await visible('#article-two .picture'), true);
+      await send({ type: 'undo' });
+      await waitVisible('#article-one .picture');
+      await page.keyboard.press('Escape');
+      assert.equal(await page.locator('[data-click-and-get-out-ui]').count(), 0);
+    });
+    await t.test('a stretched link covering a card does not hijack what is under the pointer', async () => {
+      await start(false);
+      const bar = page.locator('[data-click-and-get-out-ui]').locator('.bar');
+      const target = bar.locator('.target .name');
+      // The headline link's ::after covers the whole card, so the browser reports the link as
+      // the element under the pointer even over the thumbnail. Playwright's own hit-target
+      // check trips over that too, hence force: the mouse still moves to the element's centre.
+      await page.locator('#card .thumb').hover({ force: true });
+      assert.match(await target.textContent(), /^Elemento · div$/);
+      await page.locator('#card p').hover({ force: true });
+      assert.match(await target.textContent(), /^Párrafo · Descripción de la tarjeta/);
+      await page.locator('#card-link').hover();
+      assert.match(await target.textContent(), /^Enlace · Titular de la tarjeta/);
+      await page.locator('#card .thumb').click({ force: true });
+      assert.match(await target.textContent(), /^Elemento · div$/);
+      await page.locator('#card .thumb').click({ force: true });
+      await waitHidden('#card .thumb');
+      assert.equal(await visible('#card-link'), true);
+      assert.equal(page.url(), origin + '/');
+      await send({ type: 'undo' });
+      await waitVisible('#card .thumb');
       await page.keyboard.press('Escape');
     });
     await t.test('remembered rules survive reload and site reinsertion', async () => {
@@ -168,6 +230,8 @@ test('Real extension: selection, persistence, dynamic content, undo and isolatio
       await start(false);
       assert.equal(await page.locator('[data-click-and-get-out-ui]').count(), 1);
       await page.locator('#article-one .picture').hover();
+      // Enter marks the pointed element; a second Enter confirms.
+      await page.keyboard.press('Enter');
       await page.keyboard.press('Enter');
       await waitHidden('#article-one .picture');
       assert.equal(await visible('#article-two .picture'), true);
@@ -180,6 +244,7 @@ test('Real extension: selection, persistence, dynamic content, undo and isolatio
       await rpc({ type: 'unlock', value: true });
       await start(false);
       await page.locator('#article-two').hover({ position: { x: 10, y: 10 } });
+      await page.keyboard.press('Enter');
       await page.keyboard.press('Enter');
       await waitHidden('#article-two');
       await rpc({ type: 'reset' });
@@ -305,24 +370,49 @@ test('Real extension: selection, persistence, dynamic content, undo and isolatio
         await page.emulateMedia({ colorScheme: theme });
         await page.setViewportSize({ width: 1280, height: 900 });
         await start(false);
-        await page.locator('#notice-link').hover();
-        await page.keyboard.press('ArrowUp');
         const bar = page.locator('[data-click-and-get-out-ui]').locator('.bar');
-        const target = bar.locator('.target');
-        assert.match(await target.textContent(), /^Aviso ·/);
-        assert.ok((await target.getAttribute('title')).includes('#notice'));
-        assert.equal(await bar.locator('.warning').isVisible(), false);
+        const target = bar.locator('.target .name');
+        const meta = bar.locator('.target .meta');
+        const hide = bar.getByRole('button', { name: 'Ocultar', exact: true });
+        const tag = page.locator('[data-click-and-get-out-ui]').locator('.outline .tag');
+        // Sin nada señalado la tarjeta muestra una pista y conserva su altura.
+        assert.equal(await target.textContent(), 'Señala y haz clic para marcar');
+        assert.equal(await bar.locator('.target').evaluate(el => el.classList.contains('empty')), true);
+        const idleHeight = (await bar.boundingBox()).height;
+        await page.locator('#notice-link').hover();
+        assert.match(await target.textContent(), /^Enlace ·/);
+        // La segunda línea describe el bloque: etiqueta HTML, tamaño y, si los hay, flotación y contenido.
+        assert.match(await meta.textContent(), /^a#notice-link · \d+ × \d+ px$/);
+        assert.equal((await bar.boundingBox()).height, idleHeight);
+        assert.equal(await hide.isDisabled(), true);
+        assert.equal(await tag.isVisible(), false);
         assert.equal((await bar.boundingBox()).width, 560);
-        assert.ok((await bar.boundingBox()).height <= 112);
+        assert.ok((await bar.boundingBox()).height <= 168, `Toolbar height while pointing: ${(await bar.boundingBox()).height}`);
+        // Growing the selection marks it: the frame locks, the tag appears and Ocultar wakes up.
+        await page.keyboard.press('ArrowUp');
+        assert.match(await target.textContent(), /^Aviso ·/);
+        assert.match(await meta.textContent(), /^aside#notice · \d+ × \d+ px · Flotante · 1 enlace$/);
+        assert.ok((await bar.locator('.target').getAttribute('title')).includes('#notice'));
+        assert.equal(await bar.locator('.warning').isVisible(), false);
+        assert.equal(await hide.isEnabled(), true);
+        assert.equal(await tag.isVisible(), true);
+        assert.ok((await bar.boundingBox()).height <= 204, `Toolbar height with a mark: ${(await bar.boundingBox()).height}`);
         await page.screenshot({ path: join(root, `test-results/selector-${theme}.png`) });
         await bar.screenshot({ path: join(root, `test-results/toolbar-${theme}.png`) });
+        await page.keyboard.press('Escape');
+        assert.equal(await tag.isVisible(), false);
         await page.locator('#article-one .picture').hover();
         await bar.locator('.warning').waitFor({ state: 'visible' });
         await bar.screenshot({ path: join(root, `test-results/toolbar-${theme}-warning.png`) });
         await bar.getByRole('button', { name: 'Ampliar', exact: true }).click();
         assert.match(await target.textContent(), /^Artículo ·/);
+        assert.equal(await hide.isEnabled(), true);
         // La barra va listando lo ocultado en esta visita y sigue al botón Deshacer.
         assert.equal(await bar.locator('.picks').isVisible(), false);
+        // Un clic fuera de la marca la mueve; el segundo, ya encima, oculta.
+        await page.locator('#article-two').click({ position: { x: 10, y: 10 } });
+        assert.match(await target.textContent(), /^Artículo · Más noticias/);
+        assert.equal(await visible('#article-two'), true);
         await page.locator('#article-two').click({ position: { x: 10, y: 10 } });
         await waitHidden('#article-two');
         const picked = bar.locator('.picks-list li');
@@ -335,10 +425,27 @@ test('Real extension: selection, persistence, dynamic content, undo and isolatio
         await waitVisible('#article-two');
         await bar.locator('.picks').waitFor({ state: 'hidden' });
         await page.setViewportSize({ width: 320, height: 640 });
+        // Narrow layout, with a mark pending so the Ocultar button is live. At this width the
+        // toolbar and the fixed notice cover most of the viewport, so find a spot in between.
+        // The fixture's notice alone takes two thirds of a 320 px viewport: tighten it so the
+        // toolbar, now with the element card, still leaves page content reachable below.
+        await page.evaluate(() => document.querySelector('#notice').style.padding = '12px 16px');
+        const spot = await page.evaluate(() => {
+          for (let y = 0; y < innerHeight; y += 8) {
+            const el = document.elementFromPoint(160, y);
+            if (el?.closest('main') && !el.closest('[data-click-and-get-out-ui]')) return y;
+          }
+          return null;
+        });
+        assert.ok(spot !== null, 'Some page content should stay reachable between the toolbar and the notice');
+        await page.mouse.move(160, spot);
+        await page.keyboard.press('Enter');
+        assert.equal(await hide.isEnabled(), true);
         const box = await bar.boundingBox();
         assert.ok(box.x >= 0 && box.x + box.width <= 320);
         assert.equal(await bar.evaluate(el => el.scrollWidth <= el.clientWidth), true);
         await bar.screenshot({ path: join(root, `test-results/toolbar-${theme}-narrow.png`) });
+        await page.evaluate(() => document.querySelector('#notice').style.removeProperty('padding'));
         await page.emulateMedia({ reducedMotion: 'reduce' });
         assert.equal(await bar.locator('button').first().evaluate(el => getComputedStyle(el).transitionDuration), '0s');
         await bar.getByRole('button', { name: 'Terminar selección' }).focus();

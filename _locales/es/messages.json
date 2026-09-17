@@ -16,6 +16,8 @@
   "resetSite": { "message": "Restaurar web" },
   "unlockLabel": { "message": "Recuperar desplazamiento" },
   "unlockHelp": { "message": "Si un aviso bloquea el scroll." },
+  "support": { "message": "Invítame a un café" },
+  "supportTitle": { "message": "Opcional. Abre buymeacoffee.com en una pestaña nueva." },
   "unsupportedPage": { "message": "Página no compatible" },
   "ruleFragile": { "message": "$1 (Depende de la estructura de la página)" },
   "toggleLabel": { "message": "Ocultar $1" },

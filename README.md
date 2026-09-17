@@ -222,7 +222,7 @@ One entry per origin, capped at 200 rules per site:
 
 ## 🔒 Privacy and permissions
 
-**There are no network requests. None.** No analytics, no accounts, no telemetry, no remote code. What you save never leaves your Chrome profile and is not synced to any account.
+**There are no network requests. None.** No analytics, no accounts, no telemetry, no remote code. What you save never leaves your Chrome profile and is not synced to any account. The *Buy me a coffee* link at the foot of the menu is a plain link: nothing is loaded from it, and it only opens, in a new tab, if you click it.
 
 | Permission | What for |
 |---|---|
@@ -342,7 +342,7 @@ Issues and pull requests are welcome.
 
 ## ☕ Support the project
 
-If it has saved you some aggravation, you can buy me a coffee:
+If it has saved you some aggravation, you can buy me a coffee. The same link sits, small, at the foot of the extension's menu; it is optional and unlocks nothing.
 
 <a href="https://www.buymeacoffee.com/the.gatsbys" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy me a coffee" height="48"></a>
 

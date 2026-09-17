@@ -11,11 +11,20 @@ const root = resolve(import.meta.dirname, '..');
 const fixture = await readFile(join(import.meta.dirname, 'fixture.html'));
 const productionManifest = JSON.parse(await readFile(join(root, 'manifest.json')));
 
-test('Manifest: no broad mandatory site access and no remote runtime code', () => {
+test('Manifest: no broad mandatory site access and no remote runtime code', async () => {
   assert.equal(productionManifest.manifest_version, 3);
   assert.equal(productionManifest.host_permissions, undefined);
   assert.deepEqual(productionManifest.permissions, ['activeTab', 'scripting', 'storage']);
   assert.equal(productionManifest.content_scripts, undefined);
+  // "No network requests" has to survive the donation link: the menu may point at one
+  // outside page, as a plain link, and may load nothing from anywhere but the package.
+  const popup = await readFile(join(root, 'popup.html'), 'utf8');
+  assert.deepEqual(popup.match(/https?:\/\/[^"'\s<>]+/g), ['https://www.buymeacoffee.com/the.gatsbys']);
+  assert.match(popup, /<a id="support" href="https:\/\/www\.buymeacoffee\.com\/the\.gatsbys" target="_blank" rel="noopener noreferrer">/);
+  for (const [, attr, link] of popup.matchAll(/\b(?:src|srcset|action|data|poster)="([^"]*)"|<link[^>]*\bhref="([^"]*)"/g)) assert.doesNotMatch(attr ?? link, /^(?:[a-z]+:)?\/\//i);
+  for (const file of ['popup.css', 'popup.js', 'background.js', 'content.js', 'selectors.js']) {
+    assert.doesNotMatch(await readFile(join(root, file), 'utf8'), /https?:\/\/(?!\*)|\bfetch\(|XMLHttpRequest|WebSocket|sendBeacon|@import|url\(/, `Remote reference in ${file}`);
+  }
 });
 
 test('Locales: every language carries the same messages as the default one', async () => {
@@ -354,7 +363,9 @@ test('Real extension: selection, persistence, dynamic content, undo and isolatio
         await control.waitForFunction(() => !document.querySelector('#pick').disabled);
         const size = await control.locator('body').boundingBox();
         assert.equal(size.width, 360);
-        assert.ok(size.height <= 440, `Empty popup height: ${size.height}`);
+        assert.ok(size.height <= 466, `Empty popup height: ${size.height}`);
+        assert.equal((await control.locator('#support').textContent()).trim(), 'Invítame a un café');
+        assert.ok((await control.locator('footer').boundingBox()).height <= 32, 'The donation link is one compact line');
         assert.equal(await control.evaluate(() => getComputedStyle(document.body).backgroundColor), theme === 'dark' ? 'rgb(23, 23, 23)' : 'rgb(255, 255, 255)');
         assert.equal(await control.locator('#undo').isDisabled(), true);
         await control.locator('body').screenshot({ path: join(root, `test-results/popup-${theme}-empty.png`) });
@@ -377,12 +388,16 @@ test('Real extension: selection, persistence, dynamic content, undo and isolatio
         await control.waitForFunction(() => document.querySelector('#count').textContent === '10');
         assert.ok((await control.locator('body').boundingBox()).height < 600);
         assert.equal(await control.locator('#rules').evaluate(el => el.scrollHeight > el.clientHeight), true);
+        // The footer must not push a full list into scrolling the whole menu.
+        assert.equal(await control.locator('main').evaluate(el => el.scrollHeight <= el.clientHeight), true);
+        assert.equal(await control.locator('#support').isVisible(), true);
         assert.equal(await control.evaluate(() => document.body.scrollWidth <= 360), true);
         await control.locator('body').screenshot({ path: join(root, `test-results/popup-${theme}-many.png`) });
         // Exercise the real error rendering after a failed extension API call.
         await control.evaluate(() => { chrome.runtime.sendMessage = async () => ({ ok: false, error: 'No se pudo guardar el cambio. Recarga la página y vuelve a intentarlo.' }); });
         await control.locator('#rules .delete').first().click();
         await control.locator('#status').waitFor({ state: 'visible' });
+        assert.equal(await control.locator('#support').isVisible(), false, 'An error takes the room of the donation link');
         await control.locator('body').screenshot({ path: join(root, `test-results/popup-${theme}-error.png`) });
         const errorHeight = (await control.locator('body').boundingBox()).height;
         assert.ok(errorHeight < 600, `Popup height with error: ${errorHeight}`);
@@ -519,6 +534,8 @@ test('English interface: menu, toolbar, errors and badge follow the locale', { t
     assert.equal(await control.locator('#empty').textContent(), 'No saved elements');
     assert.equal(await control.locator('.tools').textContent(), 'UndoReset site');
     assert.equal(await control.locator('.scroll').textContent(), 'Restore scrollingIf a notice blocks scrolling.');
+    assert.equal((await control.locator('#support').textContent()).trim(), 'Buy me a coffee');
+    assert.equal(await control.locator('#support').getAttribute('title'), 'Optional. Opens buymeacoffee.com in a new tab.');
     await mkdir(join(root, 'test-results'), { recursive: true });
     await control.locator('body').screenshot({ path: join(root, 'test-results/popup-en.png') });
     const tabId = await worker.evaluate(async origin => (await chrome.tabs.query({})).find(t => t.url === origin + '/').id, origin);

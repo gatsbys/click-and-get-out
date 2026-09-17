@@ -1,6 +1,6 @@
 # Privacy policy — Click and get out
 
-**Last updated:** 15 September 2026
+**Last updated:** 17 September 2026
 
 Spanish version: [`PRIVACY.md`](PRIVACY.md).
 
@@ -58,6 +58,14 @@ Only in the extension's local storage inside your Chrome profile
   → **Site access**. Once withdrawn, the extension stops registering its script
   on that site.
 - **Uninstalling the extension** removes all of its local storage.
+
+## The "Buy me a coffee" link
+
+The foot of the menu carries a link to the author's page on buymeacoffee.com. It
+is a plain link: the extension loads nothing from that site and sends it nothing,
+so the summary above still holds. Only if you click it does your browser open
+that page in a new tab, as it would with any other link, and from then on that
+site's own privacy policy applies. Donating is voluntary and unlocks nothing.
 
 ## Remote code
 

@@ -16,6 +16,8 @@
   "resetSite": { "message": "Reset site" },
   "unlockLabel": { "message": "Restore scrolling" },
   "unlockHelp": { "message": "If a notice blocks scrolling." },
+  "support": { "message": "Buy me a coffee" },
+  "supportTitle": { "message": "Optional. Opens buymeacoffee.com in a new tab." },
   "unsupportedPage": { "message": "Unsupported page" },
   "ruleFragile": { "message": "$1 (Depends on the page's structure)" },
   "toggleLabel": { "message": "Hide $1" },

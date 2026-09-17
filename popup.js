@@ -3,6 +3,8 @@ const t = (key, ...values) => chrome.i18n.getMessage(key, values.map(String));
 // Los textos fijos de popup.html llevan su clave de _locales en data-i18n.
 document.documentElement.lang = t('langCode');
 for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = t(el.dataset.i18n);
+// Un enlace corriente: la extensión no carga nada de ese sitio; solo se abre si se pulsa.
+$('support').title = t('supportTitle');
 let tab;
 let origin;
 let site = { rules: [], unlockScroll: false };

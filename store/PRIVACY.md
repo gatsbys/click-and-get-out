@@ -1,6 +1,6 @@
 # Política de privacidad — Click and get out
 
-**Última actualización:** 15 de septiembre de 2026
+**Última actualización:** 17 de septiembre de 2026
 
 Versión en inglés: [`PRIVACY.en.md`](PRIVACY.en.md).
 
@@ -60,6 +60,15 @@ Chrome (`chrome.storage.local`), en tu propio dispositivo. Estos datos:
   **Detalles** → **Acceso al sitio**. Al retirarlo, la extensión deja de
   registrar su script en ese sitio.
 - **Desinstalar la extensión** elimina todo su almacenamiento local.
+
+## El enlace «Invítame a un café»
+
+Al pie del menú hay un enlace a la página del autor en buymeacoffee.com. Es un
+enlace corriente: la extensión no carga nada de ese sitio ni le envía nada, de
+modo que el resumen de arriba sigue siendo exacto. Solo si lo pulsas tu navegador
+abre esa página en una pestaña nueva, como haría con cualquier otro enlace, y a
+partir de ahí se aplica la política de privacidad de ese sitio. Donar es
+voluntario y no desbloquea nada.
 
 ## Código remoto
 

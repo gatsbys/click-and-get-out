@@ -38,7 +38,7 @@ header { flex-shrink: 0; display: flex; align-items: center; gap: 9px; padding: 
 svg { display: block; width: 16px; height: 16px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .app-icon { width: 20px; height: 20px; }
 .wordmark { font-size: 14px; font-weight: 600; letter-spacing: -.25px; }
-main { min-height: 0; overflow-y: auto; padding: 16px; }
+main { min-height: 0; overflow-y: auto; padding: 16px 16px 12px; }
 .site-line { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
 .site-line svg { color: var(--muted); }
 h1 { font-size: 16px; line-height: 1.35; font-weight: 600; letter-spacing: -.3px; overflow-wrap: anywhere; margin: 0; min-width: 0; }
@@ -46,7 +46,7 @@ button { font: inherit; color: var(--text); cursor: pointer; display: inline-fle
 button:hover:not(:disabled) { background: var(--subtle); border-color: var(--switch-off); }
 button:active:not(:disabled) { background: var(--hover); }
 button:disabled { opacity: .45; cursor: default; }
-button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .primary { width: 100%; min-height: 38px; background: var(--primary); color: var(--on-primary); border-color: var(--primary); font-weight: 500; }
 .primary:hover:not(:disabled) { background: var(--primary); border-color: var(--primary); opacity: .88; }
 .setting { display: flex; align-items: center; justify-content: space-between; gap: 14px; cursor: pointer; }
@@ -84,6 +84,13 @@ li button { flex-shrink: 0; min-height: 28px; padding: 3px 8px; font-size: 12px;
 .link:hover:not(:disabled), .link:active:not(:disabled) { background: none; border: 0; opacity: .8; }
 #status { color: var(--error); background: var(--error-bg); border-radius: 8px; font-size: 12px; margin: 14px 0 0; padding: 10px; overflow-wrap: anywhere; }
 #status:empty { display: none; }
+footer { flex-shrink: 0; display: flex; justify-content: center; padding: 6px 16px; border-top: 1px solid var(--border); }
+/* An error needs the room more than the link does. */
+.has-error footer { display: none; }
+#support { display: inline-flex; align-items: center; gap: 6px; border-radius: 3px; color: var(--muted); font-size: 12px; text-decoration: none; }
+#support:hover { color: var(--text); text-decoration: underline; }
+/* Buy Me a Coffee's own mark is a filled shape, unlike the stroked icons above. */
+#support svg { width: 14px; height: 14px; fill: currentColor; stroke: none; }
 @media (prefers-reduced-motion: reduce) { *, *::before { transition: none !important; } }
 @media (forced-colors: active) {
   input[role='switch'] { appearance: auto; }

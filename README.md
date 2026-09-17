@@ -52,6 +52,7 @@ A visual picker for taking the banner, the notice or the column you did not come
 - [Development](#-development)
 - [Demo site](#-demo-site)
 - [Publishing to the Chrome Web Store](#-publishing-to-the-chrome-web-store)
+- [Contributing](#-contributing)
 - [Support the project](#-support-the-project)
 - [License](#-license)
 
@@ -225,14 +226,20 @@ Worth knowing what it does **not** do:
 
 ## 📦 Install
 
-1. Open `chrome://extensions`.
-2. Turn on **Developer mode**, top right.
-3. **Load unpacked** → pick this folder, the one with `manifest.json` in it.
-4. Pin it from the extensions button (the puzzle piece).
+1. Get the code: clone the repo, or use **Code → Download ZIP** on GitHub and unzip it.
 
-If what you have is a `click-and-get-out.zip` build, unzip it first and load the extracted folder. Keep that folder: Chrome reads the files from there. Nothing needs Node, or any install at all, to *use* the extension.
+   ```sh
+   git clone https://github.com/gatsbys/click-and-get-out.git
+   ```
 
-**Updating:** replace the files in the same folder and hit **Reload** on its card in `chrome://extensions`. Keeping the path keeps the extension's id, and with it your saved rules.
+2. Open `chrome://extensions`.
+3. Turn on **Developer mode**, top right.
+4. **Load unpacked** → pick the folder you just got, the one with `manifest.json` in it.
+5. Pin it from the extensions button (the puzzle piece).
+
+If what you have is a `click-and-get-out.zip` build, unzip it first and load the extracted folder. Either way, keep that folder where it is: Chrome reads the files from there. Nothing needs Node, or any install at all, to *use* the extension.
+
+**Updating:** replace the files in the same folder — `git pull`, if you cloned — and hit **Reload** on its card in `chrome://extensions`. Keeping the path keeps the extension's id, and with it your saved rules.
 
 ## 💻 Development
 
@@ -291,6 +298,17 @@ This is the maintainer's checklist. Under the [license](#-license), nobody else 
 
 Upload `dist/click-and-get-out-store.zip`, not the other one: the store rejects a ZIP whose `manifest.json` is not at the root.
 
+## 🤝 Contributing
+
+Issues and pull requests are welcome.
+
+- **A block will not hide, or keeps coming back?** [Open an issue](https://github.com/gatsbys/click-and-get-out/issues) with the page's URL, the block you pointed at and your Chrome version. If the toolbar showed the amber structure warning, say so.
+- **Sending a pull request?** Run `npm run check` and `npm test` first; both have to pass. There is no build step, so what you edit is what Chrome loads.
+- Two lines the project does not cross: no production dependencies and no network requests.
+
+> [!IMPORTANT]
+> The [license](#-license) does not allow changing the code, so pull requests need an explicit exception, and this is it: you may fork this repository and modify the code **for the sole purpose of proposing those changes back here as a pull request**. By opening one, you agree that your contribution becomes part of the project under its license, and you grant the copyright holder a perpetual, worldwide, irrevocable, royalty-free right to use, modify, distribute and relicense it.
+
 ## ☕ Support the project
 
 If it has saved you some aggravation, you can buy me a coffee:
@@ -302,7 +320,7 @@ If it has saved you some aggravation, you can buy me a coffee:
 **Source-available, not open source.** The code is here to be read, audited and used, under the [PolyForm Strict License 1.0.0](LICENSE):
 
 - **You can** install it and use it, free of charge, for any personal or otherwise noncommercial purpose — and read every line to check that it does what it says.
-- **You cannot** distribute it, changed or unchanged — which includes uploading it to the Chrome Web Store or any other store, under this name or another — nor use it commercially, sell it, or make changes or new works based on it.
+- **You cannot** distribute it, changed or unchanged — which includes uploading it to the Chrome Web Store or any other store, under this name or another — nor use it commercially, sell it, or make changes or new works based on it. The one exception is the one in [Contributing](#-contributing), which is what makes pull requests possible.
 
 That is a summary for convenience; the [license text](LICENSE) is what governs. For anything it does not cover, [open an issue](https://github.com/gatsbys/click-and-get-out/issues).
 

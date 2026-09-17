@@ -2,6 +2,8 @@
 
 **Última actualización:** 15 de septiembre de 2026
 
+Versión en inglés: [`PRIVACY.en.md`](PRIVACY.en.md).
+
 ## Resumen
 
 Click and get out no recopila, no transmite y no vende ningún dato. La
@@ -16,6 +18,7 @@ guarda, asociado al origen de ese sitio (protocolo, host y puerto):
 - El **selector CSS** que identifica el bloque elegido.
 - Una **etiqueta breve** (máximo 100 caracteres) tomada del texto o del
   `aria-label` de ese bloque, para que puedas reconocer la regla en la lista.
+- Si la regla está **activada o desactivada**.
 - Si marcas o no la opción de **recuperar el desplazamiento** en ese sitio.
 - La fecha en que creaste la regla.
 

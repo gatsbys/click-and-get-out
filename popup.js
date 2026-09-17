@@ -1,4 +1,8 @@
 const $ = id => document.getElementById(id);
+const t = (key, ...values) => chrome.i18n.getMessage(key, values.map(String));
+// Los textos fijos de popup.html llevan su clave de _locales en data-i18n.
+document.documentElement.lang = t('langCode');
+for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = t(el.dataset.i18n);
 let tab;
 let origin;
 let site = { rules: [], unlockScroll: false };
@@ -14,13 +18,13 @@ const showError = error => {
 };
 async function rpc(data) {
   const result = await chrome.runtime.sendMessage({ channel: 'click-and-get-out', origin, ...data });
-  if (!result?.ok) throw new Error(result?.error || 'No se pudo completar la acción.');
+  if (!result?.ok) throw new Error(result?.error || t('errAction'));
   return result;
 }
 async function page(data, inject = true) {
   if (inject) await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ['selectors.js', 'content.js'] });
   const result = await chrome.tabs.sendMessage(tab.id, { channel: 'click-and-get-out-tab', ...data }, { frameId: 0 });
-  if (!result?.ok) throw new Error(result?.error || 'La página no responde. Recárgala y prueba de nuevo.');
+  if (!result?.ok) throw new Error(result?.error || t('errPageSilent'));
   return result;
 }
 function render() {
@@ -34,16 +38,16 @@ function render() {
     li.classList.toggle('off', !enabled);
     const label = li.querySelector('.label');
     label.textContent = rule.label;
-    label.title = rule.selector + (rule.fragile ? ' (Depende de la estructura de la página)' : '');
+    label.title = rule.fragile ? t('ruleFragile', rule.selector) : rule.selector;
     const toggle = li.querySelector('.toggle');
     toggle.checked = enabled;
     toggle.disabled = busy;
-    toggle.setAttribute('aria-label', `Ocultar ${rule.label}`);
-    toggle.title = enabled ? 'Se está ocultando. Desactívalo para volver a verlo sin borrar la regla.' : 'Desactivado: el elemento se ve. Actívalo para volver a ocultarlo.';
+    toggle.setAttribute('aria-label', t('toggleLabel', rule.label));
+    toggle.title = t(enabled ? 'toggleOnTitle' : 'toggleOffTitle');
     toggle.addEventListener('change', () => run(async () => { await rpc({ type: 'toggle', id: rule.id, value: toggle.checked }); await refresh(); }));
     const remove = li.querySelector('.delete');
-    remove.setAttribute('aria-label', `Eliminar ${rule.label}`);
-    remove.title = 'Eliminar esta regla de la web';
+    remove.setAttribute('aria-label', t('deleteLabel', rule.label));
+    remove.title = t('deleteTitle');
     remove.disabled = busy;
     remove.addEventListener('click', () => run(async () => { await rpc({ type: 'remove', id: rule.id }); await refresh(); }));
     $('rules').append(li);
@@ -53,13 +57,13 @@ function render() {
   $('unlock').disabled = busy || !origin;
   $('unlock').checked = site.unlockScroll || tabStatus.temporaryUnlock;
   // No depende del origen: puede concederse incluso desde una pestaña no compatible.
-  $('grant-text').textContent = allSites ? 'Permiso concedido en todas las webs.' : 'Se pedirá permiso en cada web nueva.';
-  $('grant-toggle').textContent = allSites ? 'Quitar' : 'Permitir en todas';
+  $('grant-text').textContent = t(allSites ? 'grantAll' : 'grantEach');
+  $('grant-toggle').textContent = t(allSites ? 'grantRemove' : 'grantAllow');
   $('grant-toggle').disabled = busy;
   $('undo').disabled = busy || !tabStatus.canUndo;
   $('reset').disabled = busy || !(site.rules.length || tabStatus.temporaryCount || site.unlockScroll || tabStatus.temporaryUnlock);
   $('temporary').hidden = !tabStatus.temporaryCount;
-  $('temporary').textContent = `${tabStatus.temporaryCount} ${tabStatus.temporaryCount === 1 ? 'elemento oculto' : 'elementos ocultos'} solo en esta visita.`;
+  $('temporary').textContent = t(tabStatus.temporaryCount === 1 ? 'temporaryOne' : 'temporaryMany', tabStatus.temporaryCount);
 }
 async function refresh() {
   site = (await rpc({ type: 'get' })).site;
@@ -79,7 +83,7 @@ async function run(action) {
 async function permit() {
   const url = new URL(origin);
   const granted = await chrome.permissions.request({ origins: [`${url.protocol}//${url.hostname}/*`] });
-  if (!granted) throw new Error('Permiso no concedido. Desmarca «Recordar en esta web» para usar el modo temporal.');
+  if (!granted) throw new Error(t('errSiteDenied'));
   await rpc({ type: 'enable' });
 }
 $('pick').addEventListener('click', () => run(async () => {
@@ -95,7 +99,7 @@ $('grant-toggle').addEventListener('click', () => {
     const pending = grant ? chrome.permissions.request({ origins: everySite }) : chrome.permissions.remove({ origins: everySite });
     const changed = await pending;
     allSites = await readAllSites();
-    if (!changed) throw new Error(grant ? 'Permiso no concedido. Se seguirá pidiendo en cada web.' : 'Chrome no ha retirado el permiso. Puedes hacerlo en Detalles → Acceso al sitio.');
+    if (!changed) throw new Error(t(grant ? 'errAllDenied' : 'errAllKept'));
   });
 });
 $('undo').addEventListener('click', () => run(async () => { await page({ type: 'undo' }); await refresh(); }));
@@ -119,10 +123,10 @@ $('unlock').addEventListener('change', () => {
     allSites = await readAllSites();
     [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     const url = new URL(tab.url);
-    if (!['https:', 'http:'].includes(url.protocol) || url.hostname === 'chromewebstore.google.com' || (url.hostname === 'chrome.google.com' && url.pathname.startsWith('/webstore'))) throw new Error('Abre una web normal. Chrome no permite modificar sus páginas internas ni la tienda de extensiones.');
+    if (!['https:', 'http:'].includes(url.protocol) || url.hostname === 'chromewebstore.google.com' || (url.hostname === 'chrome.google.com' && url.pathname.startsWith('/webstore'))) throw new Error(t('errUnsupportedPage'));
     origin = url.origin;
     $('site').textContent = url.hostname;
     await refresh();
-  } catch (error) { origin = null; $('site').textContent = 'Página no compatible'; showError(error); }
+  } catch (error) { origin = null; $('site').textContent = t('unsupportedPage'); showError(error); }
   render();
 })();

@@ -1,8 +1,9 @@
 const emptySite = () => ({ rules: [], unlockScroll: false });
+const t = (key, ...values) => chrome.i18n.getMessage(key, values.map(String));
 const keyFor = origin => `site:${origin}`;
 function webOrigin(value) {
   const url = new URL(value);
-  if (!['http:', 'https:'].includes(url.protocol)) throw new Error('Abre una página web http o https.');
+  if (!['http:', 'https:'].includes(url.protocol)) throw new Error(t('errNotWeb'));
   return url.origin;
 }
 function matchFor(origin) {
@@ -16,8 +17,8 @@ async function readSite(origin) {
 function badgeFor(site) {
   const count = site.rules.filter(rule => rule.enabled !== false).length;
   if (!count && !site.unlockScroll) return { text: '', title: 'Click and get out' };
-  const detail = [count && `${count} ${count === 1 ? 'elemento oculto' : 'elementos ocultos'}`, site.unlockScroll && 'desplazamiento recuperado'].filter(Boolean);
-  return { text: count ? String(count) : '\u2022', title: `Click and get out \u00b7 ${detail.join(' y ')} en esta web` };
+  const detail = [count && t(count === 1 ? 'badgeHiddenOne' : 'badgeHiddenMany', count), site.unlockScroll && t('badgeScroll')].filter(Boolean);
+  return { text: count ? String(count) : '\u2022', title: `Click and get out \u00b7 ${detail.join(' \u00b7 ')}` };
 }
 // Chrome solo revela tab.url donde el sitio ha concedido acceso, que es justo donde
 // pueden aplicarse reglas. En el resto la marca queda vacía sin pedir el permiso «tabs».
@@ -32,7 +33,7 @@ async function paint(tab) {
 const paintAll = async () => { for (const tab of await chrome.tabs.query({})) await paint(tab); };
 async function register(origin) {
   const matches = [matchFor(origin)];
-  if (!await chrome.permissions.contains({ origins: matches })) throw new Error('Activa «Recordar en esta web» y concede el permiso del sitio.');
+  if (!await chrome.permissions.contains({ origins: matches })) throw new Error(t('errNeedPermission'));
   const id = scriptId(origin);
   const existing = await chrome.scripting.getRegisteredContentScripts({ ids: [id] });
   if (!existing.length) await chrome.scripting.registerContentScripts([{
@@ -40,25 +41,25 @@ async function register(origin) {
   }]);
 }
 async function handle(message, sender) {
-  if (sender.id !== chrome.runtime.id) throw new Error('Origen no permitido.');
+  if (sender.id !== chrome.runtime.id) throw new Error(t('errSender'));
   const fromPage = !sender.url?.startsWith(chrome.runtime.getURL(''));
   const origin = webOrigin(fromPage ? sender.url : message.origin);
   const site = await readSite(origin);
   switch (message.type) {
     case 'get': return { site };
     case 'enable':
-      if (fromPage) throw new Error('Acción solo disponible en el menú.');
+      if (fromPage) throw new Error(t('errMenuOnly'));
       await register(origin);
       return { site };
     case 'add': {
-      if (typeof message.selector !== 'string' || message.selector.length > 3000 || !message.selector.trim()) throw new Error('Selector no válido.');
+      if (typeof message.selector !== 'string' || message.selector.length > 3000 || !message.selector.trim()) throw new Error(t('errSelector'));
       await register(origin);
       let rule = site.rules.find(r => r.selector === message.selector);
       // What «Deshacer» has to undo later: a brand new rule, or one that was disabled.
       let revert = null;
       if (!rule) {
-        if (site.rules.length >= 200) throw new Error('Máximo de 200 bloques por web. Restaura algunos antes de continuar.');
-        rule = { id: crypto.randomUUID(), selector: message.selector, label: String(message.label || 'Bloque').slice(0, 100), fragile: Boolean(message.fragile), enabled: true, createdAt: Date.now() };
+        if (site.rules.length >= 200) throw new Error(t('errMaxRules'));
+        rule = { id: crypto.randomUUID(), selector: message.selector, label: String(message.label || t('defaultLabel')).slice(0, 100), fragile: Boolean(message.fragile), enabled: true, createdAt: Date.now() };
         site.rules.push(rule);
         revert = 'remove';
       } else if (rule.enabled === false) {
@@ -70,7 +71,7 @@ async function handle(message, sender) {
     }
     case 'toggle': {
       const rule = site.rules.find(r => r.id === message.id);
-      if (!rule) throw new Error('Esa regla ya no existe. Vuelve a abrir el menú.');
+      if (!rule) throw new Error(t('errRuleGone'));
       rule.enabled = Boolean(message.value);
       break;
     }
@@ -85,7 +86,7 @@ async function handle(message, sender) {
       site.rules = [];
       site.unlockScroll = false;
       break;
-    default: throw new Error('Acción desconocida.');
+    default: throw new Error(t('errUnknown'));
   }
   await chrome.storage.local.set({ [keyFor(origin)]: site });
   return { site };

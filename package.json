@@ -1,6 +1,6 @@
 {
   "name": "click-and-get-out",
-  "version": "1.2.0",
+  "version": "1.0.0",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
@@ -9,7 +9,9 @@
     "check": "node --check background.js && node --check content.js && node --check selectors.js && node --check popup.js",
     "pack": "node scripts/pack.mjs",
     "demo": "node scripts/demo.mjs",
-    "shots": "node scripts/store-screenshots.mjs"
+    "try": "node scripts/try.mjs",
+    "shots": "node scripts/store-screenshots.mjs",
+    "clip": "node scripts/demo-clip.mjs"
   },
   "devDependencies": {
     "playwright": "^1.55.0"

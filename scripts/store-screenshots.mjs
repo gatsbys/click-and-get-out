@@ -1,12 +1,14 @@
 // Captura las imágenes 1280x800 de la ficha de Chrome Web Store usando la
-// extensión real sobre la web de demostración, en cada idioma, y un primer
-// plano de la barra a 2x para el README. Arranca el servidor por su cuenta:
-// basta con `npm run shots`.
+// extensión real sobre la web de demostración, en cada idioma —la edición del
+// periódico y la interfaz de la extensión van a juego—, y un primer plano de la
+// barra a 2x para el README. Arranca el servidor por su cuenta: basta con
+// `npm run shots`.
 import { chromium } from 'playwright';
-import { mkdtemp, mkdir, cp, writeFile, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import { spawn } from 'node:child_process';
+import { stage } from './stage.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const size = { width: 1280, height: 800 };
@@ -20,18 +22,13 @@ const origin = 'http://localhost:4199';
 const temp = await mkdtemp(join(tmpdir(), 'click-and-get-out-shots-'));
 const open = [];
 try {
-  const extPath = join(temp, 'extension');
-  await mkdir(extPath);
-  await cp(join(root, 'icons'), join(extPath, 'icons'), { recursive: true });
-  for (const file of ['background.js', 'content.js', 'selectors.js', 'popup.js', 'popup.html', 'popup.css']) await cp(join(root, file), join(extPath, file));
-  const manifest = JSON.parse(await readFile(join(root, 'manifest.json'), 'utf8'));
-  // Grant the demo origin up front: the native permission prompt cannot be driven here.
-  await writeFile(join(extPath, 'manifest.json'), JSON.stringify({ ...manifest, host_permissions: ['http://localhost/*'] }));
-
-  // Abre Chromium con la extensión cargada y devuelve lo necesario para manejarla
-  // desde fuera: la pestaña de la demo, la del menú y los mensajes a cada parte.
-  async function session(scale) {
-    const context = await chromium.launchPersistentContext(join(temp, `profile-${scale}x`), {
+  // Abre Chromium con la extensión cargada, con la interfaz en ese idioma, y devuelve
+  // lo necesario para manejarla desde fuera: la pestaña de la demo, la del menú y los
+  // mensajes a cada parte.
+  async function session(locale, scale) {
+    // Grant the demo origin up front: the native permission prompt cannot be driven here.
+    const extPath = await stage(join(temp, `extension-${locale}`), { hosts: ['http://localhost/*'], locale });
+    const context = await chromium.launchPersistentContext(join(temp, `profile-${locale}-${scale}x`), {
       channel: 'chromium', headless: true, viewport: size, deviceScaleFactor: scale,
       args: [`--disable-extensions-except=${extPath}`, `--load-extension=${extPath}`]
     });
@@ -58,7 +55,7 @@ try {
     // del anuncio, así que se amplía con ↑ hasta encuadrar el bloque entero, que es
     // cuando el selector deja de depender de la estructura de la página. Ampliar ya
     // marca el bloque; si no hizo falta, Enter lo marca para que la barra se vea en uso.
-    const pickBillboard = async locale => {
+    const pickBillboard = async () => {
       await inject();
       await toTab({ type: 'start', remember: true });
       await page.hover('div.wrap.ad-billboard');
@@ -72,21 +69,18 @@ try {
     return { context, page, control, inject, toTab, toWorker, settle, ready, pickBillboard };
   }
 
-  const store = await session(1);
   for (const { locale, path } of editions) {
-    const { page, control, context, toTab, toWorker, ready, pickBillboard } = store;
+    const { page, control, context, toTab, toWorker, ready, pickBillboard } = await session(locale, 1);
     const out = resolve(root, 'store/screenshots', locale);
     await mkdir(out, { recursive: true });
     const shot = (name, target = page) => target.screenshot({ path: join(out, name) });
-    // Las reglas viven por origen, así que las dos ediciones comparten estado.
-    await toWorker({ type: 'reset' });
     await ready(`${origin}/${path}`);
 
     // 1. La página tal cual llega, con todo el ruido encima.
     await shot('01-before.png');
 
     // 2. El selector activo sobre el anuncio de cabecera, ya marcado.
-    await pickBillboard(locale);
+    await pickBillboard();
     await shot('02-picking.png');
     await toTab({ type: 'reset' });
 
@@ -135,15 +129,14 @@ try {
 
     console.table(report);
     console.log(`[${locale}] capturas 1280x800 en ${out}\n`);
+    await context.close();
   }
-  await store.toWorker({ type: 'reset' });
-  await store.context.close();
 
   // 5. Primer plano de la barra para el README, sobre la edición inglesa y a 2x
   // para que la tarjeta del elemento se lea nítida también en pantallas retina.
-  const detail = await session(2);
+  const detail = await session('en', 2);
   await detail.ready(`${origin}/en.html`);
-  await detail.pickBillboard('en');
+  await detail.pickBillboard();
   const out = resolve(root, 'docs/images');
   await mkdir(out, { recursive: true });
   await detail.page.screenshot({ path: join(out, 'toolbar.png'), clip: closeup });

@@ -2,6 +2,7 @@
   if (globalThis.__clickAndGetOut) return;
   globalThis.__clickAndGetOut = true;
   const { safe, selectorFor } = globalThis.ClickAndGetOutSelectors;
+  const t = (key, ...values) => chrome.i18n.getMessage(key, values.map(String));
   const storageKey = `site:${location.origin}`;
   let site = { rules: [], unlockScroll: false };
   let temporary = [];
@@ -14,7 +15,7 @@
   let scheduled = false;
   const rpc = async data => {
     const result = await chrome.runtime.sendMessage({ channel: 'click-and-get-out', ...data });
-    if (!result?.ok) throw new Error(result?.error || 'No se pudo guardar el cambio.');
+    if (!result?.ok) throw new Error(result?.error || t('errSave'));
     return result;
   };
   function saveProperty(el, name) {
@@ -138,17 +139,17 @@
         @media(prefers-reduced-motion:reduce){*{transition:none!important}}
         @media(prefers-reduced-transparency:reduce){.bar{background:var(--surface);backdrop-filter:none}}
       </style>
-      <div class="outline"><span class="tag">Marcado · otro clic para ocultar</span></div>
-      <section class="bar" role="dialog" aria-label="Selector de elementos">
-        <div class="top">${icon('cursor')}<span class="title">Selecciona un elemento</span><span class="mode">${remember ? 'En esta web' : 'Solo esta visita'}</span><button data-action="close" class="close" aria-label="Terminar selección" aria-keyshortcuts="Escape" title="Terminar selección (Esc)">${icon('close')}<span class="close-label">Terminar</span><kbd aria-hidden="true">Esc</kbd></button></div>
-        <div class="target empty" tabindex="0" title="Haz clic en un elemento para marcarlo. Otro clic, Ocultar o Enter lo ocultan."><div class="name">Señala y haz clic para marcar</div><div class="meta">Mueve el ratón por la página para ver qué es cada bloque.</div><p class="warning" hidden>Esta selección depende de la estructura de la página.</p></div>
+      <div class="outline"><span class="tag">${t('markedTag')}</span></div>
+      <section class="bar" role="dialog" aria-label="${t('pickerLabel')}">
+        <div class="top">${icon('cursor')}<span class="title">${t('pickerTitle')}</span><span class="mode">${t(remember ? 'modeSite' : 'modeVisit')}</span><button data-action="close" class="close" aria-label="${t('doneLabel')}" aria-keyshortcuts="Escape" title="${t('doneTitle')}">${icon('close')}<span class="close-label">${t('done')}</span><kbd aria-hidden="true">Esc</kbd></button></div>
+        <div class="target empty" tabindex="0" title="${t('cardEmptyTitle')}"><div class="name">${t('cardEmptyName')}</div><div class="meta">${t('cardEmptyMeta')}</div><p class="warning" hidden>${t('fragileWarning')}</p></div>
         <div class="row">
-          <div class="actions"><button data-action="parent" aria-keyshortcuts="ArrowUp" title="Ampliar al contenedor (flecha arriba)">${icon('up')}Ampliar<kbd aria-hidden="true">↑</kbd></button><button data-action="child" aria-keyshortcuts="ArrowDown" title="Volver al elemento anterior (flecha abajo)">${icon('down')}Reducir<kbd aria-hidden="true">↓</kbd></button><button data-action="undo">${icon('undo')}Deshacer</button></div>
-          <button data-action="hide" class="confirm" aria-keyshortcuts="Enter" title="Ocultar el elemento marcado (Enter)" disabled>${icon('hide')}Ocultar<kbd aria-hidden="true">⏎</kbd></button>
+          <div class="actions"><button data-action="parent" aria-keyshortcuts="ArrowUp" title="${t('growTitle')}">${icon('up')}${t('grow')}<kbd aria-hidden="true">↑</kbd></button><button data-action="child" aria-keyshortcuts="ArrowDown" title="${t('shrinkTitle')}">${icon('down')}${t('shrink')}<kbd aria-hidden="true">↓</kbd></button><button data-action="undo">${icon('undo')}${t('undo')}</button></div>
+          <button data-action="hide" class="confirm" aria-keyshortcuts="Enter" title="${t('hideTitle')}" disabled>${icon('hide')}${t('hide')}<kbd aria-hidden="true">⏎</kbd></button>
         </div>
         <p class="hint" role="status" aria-live="polite" hidden></p>
-        <div class="picks" role="group" aria-label="Elementos ocultos en esta visita" hidden>
-          <div class="picks-top"><span>Ocultados en esta visita</span><span class="picks-count">0</span></div>
+        <div class="picks" role="group" aria-label="${t('picksLabel')}" hidden>
+          <div class="picks-top"><span>${t('picksHeading')}</span><span class="picks-count">0</span></div>
           <ul class="picks-list"></ul>
         </div>
       </section>`;
@@ -166,15 +167,16 @@
       hint.hidden = !text;
       hint.classList.toggle('error', error);
     };
-    const kinds = { a: 'Enlace', img: 'Imagen', picture: 'Imagen', svg: 'Icono', video: 'Vídeo', audio: 'Audio', button: 'Botón', input: 'Campo', select: 'Campo', textarea: 'Campo', form: 'Formulario', aside: 'Aviso', dialog: 'Ventana emergente', nav: 'Navegación', header: 'Cabecera', footer: 'Pie de página', main: 'Contenido principal', article: 'Artículo', section: 'Sección', table: 'Tabla', ul: 'Lista', ol: 'Lista', li: 'Elemento de lista', p: 'Párrafo', h1: 'Título', h2: 'Título', h3: 'Título', h4: 'Título', h5: 'Título', h6: 'Título', iframe: 'Contenido incrustado' };
-    const roles = { dialog: 'Ventana emergente', alertdialog: 'Ventana emergente', button: 'Botón', link: 'Enlace', navigation: 'Navegación', banner: 'Cabecera', contentinfo: 'Pie de página', img: 'Imagen', list: 'Lista' };
-    const kindOf = el => roles[(el.getAttribute('role') || '').trim().split(/\s+/)[0]] || kinds[el.localName] || 'Elemento';
+    // Los valores son claves de _locales: el tipo se traduce al pintarlo.
+    const kinds = { a: 'kindLink', img: 'kindImage', picture: 'kindImage', svg: 'kindIcon', video: 'kindVideo', audio: 'kindAudio', button: 'kindButton', input: 'kindField', select: 'kindField', textarea: 'kindField', form: 'kindForm', aside: 'kindNotice', dialog: 'kindPopup', nav: 'kindNav', header: 'kindHeader', footer: 'kindFooter', main: 'kindMain', article: 'kindArticle', section: 'kindSection', table: 'kindTable', ul: 'kindList', ol: 'kindList', li: 'kindListItem', p: 'kindParagraph', h1: 'kindHeading', h2: 'kindHeading', h3: 'kindHeading', h4: 'kindHeading', h5: 'kindHeading', h6: 'kindHeading', iframe: 'kindEmbed' };
+    const roles = { dialog: 'kindPopup', alertdialog: 'kindPopup', button: 'kindButton', link: 'kindLink', navigation: 'kindNav', banner: 'kindHeader', contentinfo: 'kindFooter', img: 'kindImage', list: 'kindList' };
+    const kindOf = el => t(roles[(el.getAttribute('role') || '').trim().split(/\s+/)[0]] || kinds[el.localName] || 'kindElement');
     const describe = el => {
       const text = (el.getAttribute('aria-label') || el.getAttribute('alt') || el.innerText || '').trim().replace(/\s+/g, ' ');
       const label = text.length > 80 ? `${text.slice(0, 79).trimEnd()}…` : text;
       return `${kindOf(el)} · ${label || el.localName}`;
     };
-    const count = (n, one, many) => n ? [`${n} ${n === 1 ? one : many}`] : [];
+    const count = (n, key) => n ? [t(`${key}${n === 1 ? 'One' : 'Many'}`, n)] : [];
     // Datos para reconocer el bloque de un vistazo: etiqueta HTML, tamaño, si flota y qué contiene.
     const details = (el, rect) => {
       let signature = el.localName;
@@ -186,10 +188,10 @@
       return [
         signature,
         `${Math.round(rect.width)} × ${Math.round(rect.height)} px`,
-        ...(floating ? ['Flotante'] : []),
-        ...count(el.getElementsByTagName('img').length, 'imagen', 'imágenes'),
-        ...count(el.getElementsByTagName('video').length, 'vídeo', 'vídeos'),
-        ...count(el.querySelectorAll('a[href]').length, 'enlace', 'enlaces')
+        ...(floating ? [t('floating')] : []),
+        ...count(el.getElementsByTagName('img').length, 'images'),
+        ...count(el.getElementsByTagName('video').length, 'videos'),
+        ...count(el.querySelectorAll('a[href]').length, 'links')
       ].join(' · ');
     };
     const picks = root.querySelector('.picks');
@@ -208,7 +210,7 @@
         label.title = action.label;
         const mode = document.createElement('span');
         mode.className = 'pick-mode';
-        mode.textContent = action.persistent ? 'Guardado' : 'Esta visita';
+        mode.textContent = t(action.persistent ? 'pickSaved' : 'pickVisit');
         li.append(label, mode);
         picksList.append(li);
       }
@@ -224,7 +226,6 @@
     // para poder ir a la barra (Ampliar, Reducir, Ocultar) sin perder la selección.
     let pinned = false;
     let busy = false;
-    const pendingHint = 'Marcado. Confírmalo con otro clic encima, con Ocultar o con Enter. Esc lo desmarca.';
     const focus = document.activeElement;
     function paint() {
       if (!selected?.isConnected) { selected = null; pinned = false; children = []; }
@@ -237,9 +238,9 @@
         outline.style.display = 'none';
         warning.hidden = true;
         card.classList.add('empty');
-        cardName.textContent = 'Señala y haz clic para marcar';
-        cardMeta.textContent = 'Mueve el ratón por la página para ver qué es cada bloque.';
-        card.title = 'Haz clic en un elemento para marcarlo. Otro clic, Ocultar o Enter lo ocultan.';
+        cardName.textContent = t('cardEmptyName');
+        cardMeta.textContent = t('cardEmptyMeta');
+        card.title = t('cardEmptyTitle');
         card.removeAttribute('aria-description');
         return;
       }
@@ -255,7 +256,7 @@
         cardName.textContent = summary;
         cardMeta.textContent = facts;
         card.title = `${summary}\n${facts}\n${result.selector}`;
-        card.setAttribute('aria-description', `Selector CSS: ${result.selector}`);
+        card.setAttribute('aria-description', t('cardSelector', result.selector));
         warning.hidden = !result.fragile;
       } catch (error) { status(error.message, true); }
     }
@@ -263,7 +264,7 @@
       if (!safe(el)) return;
       if (el !== selected) { selected = el; children = []; }
       pinned = true;
-      status(pendingHint);
+      status(t('markedHint'));
       paint();
     }
     function unmark() {
@@ -325,7 +326,7 @@
         hovered = null;
         children = [];
         pinned = false;
-        status(remember ? 'Elemento oculto. Guardado para próximas visitas.' : 'Elemento oculto hasta que recargues la página.');
+        status(t(remember ? 'hiddenSaved' : 'hiddenVisit'));
       } catch (error) { status(error.message, true); }
       finally { busy = false; paint(); }
     }
@@ -357,7 +358,7 @@
       if (action === 'hide' && pinned) void hideSelection();
       if (action === 'undo') {
         busy = true;
-        try { await undo(); status('Último elemento restaurado.'); }
+        try { await undo(); status(t('restoredLast')); }
         catch (error) { status(error.message, true); }
         finally { busy = false; paint(); }
       }
@@ -399,7 +400,7 @@
         case 'reset': temporary = []; temporaryUnlock = false; undoStack = []; stop(); site = (await rpc({ type: 'get' })).site; reconcile(); break;
         case 'unlock': temporaryUnlock = Boolean(message.value); reconcile(); break;
         case 'status': break;
-        default: throw new Error('Acción desconocida.');
+        default: throw new Error(t('errUnknown'));
       }
       return { temporaryCount: temporary.length, canUndo: undoStack.length > 0, temporaryUnlock };
     })().then(result => respond({ ok: true, ...result }), error => respond({ ok: false, error: error.message }));

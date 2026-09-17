@@ -1,4 +1,7 @@
 (() => {
+  // selectors.js also gets loaded outside the extension (the screenshot script asks it
+  // for selectors from the page's own world), where chrome.i18n does not exist.
+  const t = key => globalThis.chrome?.i18n?.getMessage(key) || key;
   const forbidden = new Set(['HTML', 'BODY', 'HEAD', 'SCRIPT', 'STYLE', 'LINK', 'META', 'TITLE']);
   const safe = el => el instanceof Element && !forbidden.has(el.tagName) && el.getRootNode() === document;
   const unique = (selector, el) => {
@@ -39,7 +42,7 @@
     return null;
   }
   function selectorFor(el) {
-    if (!safe(el)) throw new Error('Selecciona un componente, no la página entera.');
+    if (!safe(el)) throw new Error(t('errWholePage'));
     const direct = anchor(el);
     if (direct) return { selector: direct, fragile: false };
     const parts = [];
@@ -52,7 +55,7 @@
       parts.unshift(`${node.localName}:nth-of-type(${siblings.indexOf(node) + 1})`);
     }
     const selector = `body > ${parts.join(' > ')}`;
-    if (!unique(selector, el)) throw new Error('No se pudo identificar este bloque. Prueba con su contenedor.');
+    if (!unique(selector, el)) throw new Error(t('errNoSelector'));
     return { selector, fragile: true };
   }
   globalThis.ClickAndGetOutSelectors = { safe, selectorFor };

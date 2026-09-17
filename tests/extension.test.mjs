@@ -1,10 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
-import { mkdtemp, readFile, writeFile, cp, rm, mkdir } from 'node:fs/promises';
+import { mkdtemp, readFile, readdir, rm, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import { createServer } from 'node:http';
+import { stage } from '../scripts/stage.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const fixture = await readFile(join(import.meta.dirname, 'fixture.html'));
@@ -17,18 +18,40 @@ test('Manifest: no broad mandatory site access and no remote runtime code', () =
   assert.equal(productionManifest.content_scripts, undefined);
 });
 
+test('Locales: every language carries the same messages as the default one', async () => {
+  const load = async locale => JSON.parse(await readFile(join(root, '_locales', locale, 'messages.json'), 'utf8'));
+  const locales = (await readdir(join(root, '_locales'), { withFileTypes: true })).filter(entry => entry.isDirectory()).map(entry => entry.name);
+  assert.ok(locales.includes('es') && locales.includes('en'));
+  const en = await load(productionManifest.default_locale);
+  const holes = text => (text.match(/\$\d/g) || []).sort();
+  for (const locale of locales) {
+    const messages = await load(locale);
+    assert.deepEqual(Object.keys(messages), Object.keys(en), `Keys differ: ${locale}`);
+    for (const key of Object.keys(en)) {
+      assert.ok(messages[key].message, `Empty message: ${locale}/${key}`);
+      assert.deepEqual(holes(messages[key].message), holes(en[key].message), `Placeholders differ: ${locale}/${key}`);
+    }
+    // The store rejects a summary over 132 characters.
+    assert.ok(messages.extDescription.message.length <= 132, `Summary too long: ${locale}`);
+  }
+  assert.equal(productionManifest.description, '__MSG_extDescription__');
+  assert.equal(productionManifest.default_locale, 'en');
+  // Every key the code asks for exists: getMessage returns '' for a typo, without failing.
+  const sources = await Promise.all(['background.js', 'content.js', 'selectors.js', 'popup.js', 'popup.html'].map(file => readFile(join(root, file), 'utf8')));
+  const asked = new Set(sources.join('\n').match(/(?<=['"])(?:kind|err)[A-Z][A-Za-z]+(?=['"])|(?<=\bt\(')[A-Za-z]+(?=')|(?<=data-i18n=")[A-Za-z]+(?=")/g));
+  assert.ok(asked.size > 50, `The pattern above has stopped finding keys: ${asked.size}`);
+  for (const key of asked) assert.ok(key in en, `Missing message: ${key}`);
+});
+
 test('Real extension: selection, persistence, dynamic content, undo and isolation', { timeout: 90000 }, async t => {
   const temp = await mkdtemp(join(tmpdir(), 'click-and-get-out-test-'));
   const server = createServer((req, res) => { res.setHeader('Content-Type', 'text/html; charset=utf-8'); res.end(fixture); });
   await new Promise(resolve => server.listen(0, '0.0.0.0', resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
-  const extPath = join(temp, 'extension');
-  await mkdir(extPath);
-  await cp(join(root, 'icons'), join(extPath, 'icons'), { recursive: true });
-  for (const file of ['background.js', 'content.js', 'selectors.js', 'popup.js', 'popup.html', 'popup.css']) await cp(join(root, file), join(extPath, file));
   // Grant only the local fixture origin in this test build. The production manifest
   // keeps optional host permissions; native browser permission prompts need a manual check.
-  await writeFile(join(extPath, 'manifest.json'), JSON.stringify({ ...productionManifest, host_permissions: ['http://127.0.0.1/*'] }));
+  // The interface is pinned to Spanish so the assertions below hold on any machine.
+  const extPath = await stage(join(temp, 'extension'), { hosts: ['http://127.0.0.1/*'], locale: 'es' });
   let context;
   try {
     context = await chromium.launchPersistentContext(join(temp, 'profile'), {
@@ -439,6 +462,9 @@ test('Real extension: selection, persistence, dynamic content, undo and isolatio
         });
         assert.ok(spot !== null, 'Some page content should stay reachable between the toolbar and the notice');
         await page.mouse.move(160, spot);
+        // «Deshacer» disabled itself while it had the focus, and Chrome only moves the focus
+        // out on the next frame. Until then Enter belongs to the toolbar, not to the picker.
+        await page.waitForFunction(() => !document.activeElement?.hasAttribute('data-click-and-get-out-ui'));
         await page.keyboard.press('Enter');
         assert.equal(await hide.isEnabled(), true);
         const box = await bar.boundingBox();
@@ -455,6 +481,84 @@ test('Real extension: selection, persistence, dynamic content, undo and isolatio
       });
     }
     assert.deepEqual(errors, []);
+  } finally {
+    await context?.close();
+    await new Promise(resolve => server.close(resolve));
+    await rm(temp, { recursive: true, force: true });
+  }
+});
+
+test('English interface: menu, toolbar, errors and badge follow the locale', { timeout: 60000 }, async () => {
+  const temp = await mkdtemp(join(tmpdir(), 'click-and-get-out-test-en-'));
+  const server = createServer((req, res) => { res.setHeader('Content-Type', 'text/html; charset=utf-8'); res.end(fixture); });
+  await new Promise(resolve => server.listen(0, '0.0.0.0', resolve));
+  const origin = `http://127.0.0.1:${server.address().port}`;
+  const extPath = await stage(join(temp, 'extension'), { hosts: ['http://127.0.0.1/*'], locale: 'en' });
+  let context;
+  try {
+    context = await chromium.launchPersistentContext(join(temp, 'profile'), {
+      channel: 'chromium', headless: true,
+      args: [`--disable-extensions-except=${extPath}`, `--load-extension=${extPath}`],
+      viewport: { width: 1280, height: 900 }
+    });
+    context.setDefaultTimeout(7000);
+    const worker = context.serviceWorkers()[0] || await context.waitForEvent('serviceworker');
+    const extensionId = new URL(worker.url()).host;
+    assert.match(await worker.evaluate(() => chrome.runtime.getManifest().description), /^Point, click and hide/);
+    const page = await context.newPage();
+    await page.goto(origin);
+    const control = await context.newPage();
+    await page.bringToFront();
+    await control.goto(`chrome-extension://${extensionId}/popup.html`);
+    await control.waitForFunction(() => !document.querySelector('#pick').disabled);
+    assert.equal(await control.evaluate(() => document.documentElement.lang), 'en');
+    assert.equal((await control.locator('#pick').textContent()).trim(), 'Select element');
+    assert.equal(await control.locator('.remember').textContent(), 'Remember on this siteApply on future visits too.');
+    assert.equal(await control.locator('.grant').textContent(), 'Asks for access on each new site. Allow on all sites');
+    assert.equal(await control.locator('#saved-heading').textContent(), 'Saved elements');
+    assert.equal(await control.locator('#empty').textContent(), 'No saved elements');
+    assert.equal(await control.locator('.tools').textContent(), 'UndoReset site');
+    assert.equal(await control.locator('.scroll').textContent(), 'Restore scrollingIf a notice blocks scrolling.');
+    await mkdir(join(root, 'test-results'), { recursive: true });
+    await control.locator('body').screenshot({ path: join(root, 'test-results/popup-en.png') });
+    const tabId = await worker.evaluate(async origin => (await chrome.tabs.query({})).find(t => t.url === origin + '/').id, origin);
+    const rpc = data => control.evaluate(({ origin, data }) => chrome.runtime.sendMessage({ channel: 'click-and-get-out', origin, ...data }), { origin, data });
+    const send = data => control.evaluate(({ tabId, data }) => chrome.tabs.sendMessage(tabId, { channel: 'click-and-get-out-tab', ...data }, { frameId: 0 }), { tabId, data });
+    await control.evaluate(tabId => chrome.scripting.executeScript({ target: { tabId }, files: ['selectors.js', 'content.js'] }), tabId);
+    assert.equal((await send({ type: 'start', remember: false })).ok, true);
+    const ui = page.locator('[data-click-and-get-out-ui]');
+    const bar = ui.locator('.bar');
+    assert.equal(await bar.getAttribute('aria-label'), 'Element picker');
+    assert.equal(await bar.locator('.title').textContent(), 'Select an element');
+    assert.equal(await bar.locator('.mode').textContent(), 'This visit only');
+    assert.equal(await bar.locator('.target .name').textContent(), 'Point and click to mark');
+    assert.deepEqual(await bar.locator('button').evaluateAll(buttons => buttons.map(b => b.textContent.replace(/[↑↓⏎]|Esc/g, ''))), ['Done', 'Grow', 'Shrink', 'Undo', 'Hide']);
+    await page.locator('#notice-link').hover();
+    assert.match(await bar.locator('.target .name').textContent(), /^Link · Desactiva/);
+    await page.keyboard.press('ArrowUp');
+    assert.match(await bar.locator('.target .name').textContent(), /^Notice ·/);
+    assert.match(await bar.locator('.target .meta').textContent(), /^aside#notice · \d+ × \d+ px · Floating · 1 link$/);
+    assert.equal(await ui.locator('.outline .tag').textContent(), 'Marked · click again to hide');
+    assert.equal(await bar.locator('.hint').textContent(), 'Marked. Confirm with another click on it, with Hide or with Enter. Esc unmarks it.');
+    await bar.screenshot({ path: join(root, 'test-results/toolbar-en.png') });
+    await page.keyboard.press('Enter');
+    await page.locator('#notice').waitFor({ state: 'hidden' });
+    assert.equal(await bar.locator('.hint').textContent(), 'Element hidden until you reload the page.');
+    assert.match(await bar.locator('.picks').textContent(), /^\s*Hidden this visit1.*This visit\s*$/s);
+    await page.keyboard.press('Escape');
+    await page.bringToFront();
+    await control.reload();
+    await control.locator('#temporary').waitFor({ state: 'visible' });
+    assert.equal(await control.locator('#temporary').textContent(), '1 element hidden for this visit only.');
+    // Errors raised by the service worker and the badge title are localised too.
+    assert.deepEqual(await rpc({ type: 'toggle', id: 'missing' }), { ok: false, error: 'That rule no longer exists. Open the menu again.' });
+    assert.equal((await rpc({ type: 'add', selector: '#article-one', label: 'One' })).ok, true);
+    assert.equal((await rpc({ type: 'add', selector: '#article-two', label: 'Two' })).ok, true);
+    assert.equal((await rpc({ type: 'unlock', value: true })).ok, true);
+    const title = () => worker.evaluate(tabId => chrome.action.getTitle({ tabId }), tabId);
+    const expected = 'Click and get out · 2 elements hidden on this site · scrolling restored';
+    for (let i = 0; i < 60 && await title() !== expected; i++) await new Promise(resolve => setTimeout(resolve, 50));
+    assert.equal(await title(), expected);
   } finally {
     await context?.close();
     await new Promise(resolve => server.close(resolve));

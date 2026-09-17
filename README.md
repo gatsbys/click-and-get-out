@@ -59,7 +59,6 @@ A visual picker for taking the banner, the notice or the column you did not come
 - [Install](#-install)
 - [Development](#-development)
 - [Demo site](#-demo-site)
-- [Publishing to the Chrome Web Store](#-publishing-to-the-chrome-web-store)
 - [Contributing](#-contributing)
 - [Support the project](#-support-the-project)
 - [License](#-license)
@@ -233,6 +232,8 @@ One entry per origin, capped at 200 rules per site:
 
 A rule holds a CSS selector and a short label taken from the block you picked. **Reset site** clears the ones for that origin; the permission is withdrawn from **Details → Site access**; uninstalling wipes all local storage.
 
+The full privacy policy is in this repo: [English](store/PRIVACY.en.md) · [Español](store/PRIVACY.md).
+
 Reference: [Chrome permissions](https://developer.chrome.com/docs/extensions/develop/concepts/declare-permissions) and [content scripts](https://developer.chrome.com/docs/extensions/develop/concepts/content-scripts).
 
 ## 🚧 Scope and limits
@@ -313,21 +314,6 @@ Neither the paper, nor the brands, nor the people in it exist.
 `npm run shots` loads the real extension over that demo and writes the four 1280×800 images the store asks for into `store/screenshots/es/` and `store/screenshots/en/` — each set with the newspaper's edition and the extension's interface in the same language — plus the 2× close-up of the toolbar shown above, in `docs/images/`. It doubles as a check: the header billboard has to reach a selection that does not depend on page structure, or the script fails rather than produce a bad screenshot. Each of the eight blocks it hides is reported too, with the selector it resolved to and whether that selector is structural.
 
 `npm run clip` records the GIF at the top of this page the same way, and needs `ffmpeg`. It does not capture the screen in real time: it moves the mouse a step, lets the extension repaint, takes a frame and goes again, so the result is identical on any machine. The pointer and the menu are drawn on top, because a page capture includes neither; every frame, click and block hidden underneath is the extension at work. It writes `docs/images/demo.gif` and a lighter `dist/demo.mp4`; `npm run clip es` does the Spanish edition.
-
-## 🚀 Publishing to the Chrome Web Store
-
-This is the maintainer's checklist. Under the [license](#-license), nobody else may publish the extension, on this store or any other.
-
-| File | Contents |
-|---|---|
-| `store/LISTING.en.md` | Listing copy: title, descriptions, single purpose and a justification for each permission |
-| `store/PRIVACY.en.md` | Privacy policy, to publish at a public URL and link from the listing |
-| `store/LISTING.md` · `store/PRIVACY.md` | Their Spanish counterparts |
-| `store/screenshots/` | The 1280×800 images, per language |
-
-The package is localised, so one upload serves both listings: the title and the summary come from `_locales/`, and the dashboard's **Store listing** tab offers a language selector for the detailed description and the screenshots.
-
-Upload `dist/click-and-get-out-store.zip`, not the other one: the store rejects a ZIP whose `manifest.json` is not at the root.
 
 ## 🤝 Contributing
 
